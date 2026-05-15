@@ -5,7 +5,11 @@ import { imageProxy } from './utils';
 
 const SITE_NAME = 'Apex Raw Motivation';
 const DEFAULT_DESCRIPTION =
-  '636 books. 12 series. One war-manual library. Built on 16 years of operations at Spiker Rug Werks.';
+  '636 books. 12 series. One war-manual library. Written by Brian Spiker — founder of Spiker Carpet and Tile Care, operating since 2013 (13 years).';
+
+// Canonical Spiker reference — used in every Person sameAs + isBasedOn pull.
+const SPIKER_URL = 'https://spikercarpetandtilecare.com';
+const APEX_LABS_URL = 'https://apexflowlabs.com';
 
 export function buildMetadata(input: {
   title: string;
@@ -49,14 +53,34 @@ export function buildMetadata(input: {
 // so pages still ship structured data per Master §6.4. Backend response, when
 // present, replaces these entirely.
 
+// Entity unification: every Person reference points at the same @id, and the
+// sameAs array glues Brian-the-author to Brian-the-13-year-business-operator
+// across every domain so crawlers + LLMs treat them as one entity.
 const BRIAN_PERSON = {
   '@type': 'Person',
-  '@id': `${env.siteUrl}/about-brian#brian`,
+  '@id': `${APEX_LABS_URL}/about-brian#person`,
   name: 'Brian Spiker',
   url: `${env.siteUrl}/about-brian`,
-  jobTitle: 'Founder, Apex Raw Motivation',
-  worksFor: { '@type': 'Organization', name: SITE_NAME },
-  sameAs: ['https://spikerrugworks.com'],
+  jobTitle: 'Founder & Author',
+  description:
+    'Founder of Spiker Carpet and Tile Care (operating since 2013, 13 years). Author of Apex Raw Motivation (636 books, 12 series). Founder of Apex Flow Labs.',
+  worksFor: [
+    {
+      '@type': 'Organization',
+      name: 'Spiker Carpet and Tile Care',
+      url: SPIKER_URL,
+      foundingDate: '2013',
+    },
+    { '@type': 'Organization', name: 'Apex Flow Labs', url: APEX_LABS_URL },
+    { '@type': 'Organization', name: SITE_NAME, url: env.siteUrl },
+  ],
+  sameAs: [
+    SPIKER_URL,
+    APEX_LABS_URL,
+    env.siteUrl,
+    'https://www.google.com/maps/place/Spiker+Carpet+and+Tile+Care',
+    'https://www.youtube.com/@apexrawmotivation',
+  ],
 };
 
 const APEX_ORG = {
@@ -66,13 +90,44 @@ const APEX_ORG = {
   url: env.siteUrl,
   logo: `${env.siteUrl}/logo.png`,
   founder: BRIAN_PERSON,
+  parentOrganization: {
+    '@type': 'Organization',
+    name: 'Apex Flow Labs',
+    url: APEX_LABS_URL,
+  },
 };
 
+// LocalBusiness schema for Spiker — services list is the canonical authorized
+// set. Never invent services beyond these.
+export const SPIKER_BUSINESS = {
+  '@type': 'LocalBusiness',
+  '@id': `${SPIKER_URL}#business`,
+  name: 'Spiker Carpet and Tile Care',
+  url: SPIKER_URL,
+  foundingDate: '2013',
+  description:
+    'Carpet cleaning and protection, upholstery cleaning and protection, tile and grout cleaning and sealing, pet odor removal with enzyme treatment for urine and microbiological oil treatment for wet-dog smells.',
+  founder: { '@id': `${APEX_LABS_URL}/about-brian#person` },
+  serviceType: [
+    'Carpet cleaning',
+    'Carpet protection',
+    'Upholstery cleaning',
+    'Upholstery protection',
+    'Tile and grout cleaning',
+    'Tile and grout sealing',
+    'Pet odor removal',
+    'Urine enzyme treatment',
+    'Microbiological oil treatment',
+  ],
+};
+
+// isBasedOn provenance — every book/series/article/page derives authority from
+// Brian's 13 years of running Spiker Carpet and Tile Care.
 const SPIKER_BASED_ON = {
   '@type': 'CreativeWork',
-  '@id': 'https://spikerrugworks.com#operations',
-  name: 'Spiker Rug Werks — 16 years of operational lessons',
-  url: 'https://spikerrugworks.com',
+  '@id': `${SPIKER_URL}#operations`,
+  name: '13 years running Spiker Carpet and Tile Care',
+  url: SPIKER_URL,
 };
 
 export function fallbackBookSchema(book: BookDetail): unknown[] {

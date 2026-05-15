@@ -10,7 +10,7 @@ interface HomeReviewsProps {
 }
 
 const SOURCE_LABEL: Record<ReviewExcerpt['source'], string> = {
-  spiker: 'Spiker Rug Werks customer',
+  spiker: 'Spiker Carpet and Tile Care customer',
   amazon: 'Amazon verified',
   goodreads: 'Goodreads',
   'verified-reader': 'Verified reader',
@@ -54,7 +54,7 @@ export function HomeReviews({ reviews }: HomeReviewsProps) {
             spectators.
           </h2>
           <p className="mt-4 max-w-2xl text-base text-ink-dim md:text-lg">
-            Authorized reviews from Spiker Rug Werks customers and verified Apex readers. No
+            Authorized reviews from Spiker Carpet and Tile Care customers and verified Apex readers. No
             seeded testimonials. No bot reviews. Some of these readers show up in the books —
             anonymized — as case studies.
           </p>
@@ -149,7 +149,7 @@ const PLACEHOLDER: ReviewExcerpt[] = [
   {
     id: 'placeholder-2',
     rating: 5,
-    body: 'Authorized Spiker customer reviews fold in next release — these are the receipts from sixteen years of operations.',
+    body: 'Authorized Spiker customer reviews fold in next release — these are the receipts from thirteen years of operations.',
     author: 'The system',
     source: 'spiker',
   },

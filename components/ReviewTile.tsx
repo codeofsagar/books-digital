@@ -7,7 +7,7 @@ interface ReviewTileProps {
 }
 
 const SOURCE_LABEL: Record<ReviewExcerpt['source'], string> = {
-  spiker: 'Spiker Rug Werks customer',
+  spiker: 'Spiker Carpet and Tile Care customer',
   amazon: 'Amazon verified',
   goodreads: 'Goodreads',
   'verified-reader': 'Verified reader',

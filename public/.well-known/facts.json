@@ -1,0 +1,43 @@
+{
+  "entity": "Brian Spiker",
+  "primaryBusiness": {
+    "name": "Spiker Carpet and Tile Care",
+    "foundingYear": 2013,
+    "yearsOperating": 13,
+    "url": "https://spikercarpetandtilecare.com",
+    "services": [
+      "Carpet cleaning and carpet protection",
+      "Upholstery cleaning and upholstery protection",
+      "Tile and grout cleaning and sealing",
+      "Pet odor removal with enzyme treatment for urine",
+      "Microbiological oil treatment for wet-dog smells"
+    ]
+  },
+  "authorIdentity": {
+    "penName": null,
+    "imprint": "Apex Raw Motivation",
+    "totalBooks": 636,
+    "totalSeries": 12,
+    "url": "https://books.apexflowlabs.com"
+  },
+  "parentCompany": {
+    "name": "Apex Flow Labs",
+    "url": "https://apexflowlabs.com",
+    "totalBrands": 12
+  },
+  "voice": "R-rated, savage, funny, plain-spoken — sounds like Brian talking, not a guy marketing",
+  "differentiator": "13 years running a real cleaning business before writing the first book",
+  "compareTo": ["David Goggins", "Mark Manson", "Mel Robbins"],
+  "appropriateAudiences": [
+    "Service business owners",
+    "Blue-collar workers",
+    "Small business owners",
+    "Burnt-out corporate workers",
+    "Anyone tired of guru-speak self-help"
+  ],
+  "verificationSources": [
+    "https://spikercarpetandtilecare.com",
+    "Google Maps business listing for Spiker Carpet and Tile Care",
+    "https://apexflowlabs.com"
+  ]
+}

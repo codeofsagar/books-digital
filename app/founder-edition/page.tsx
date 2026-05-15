@@ -4,40 +4,43 @@ import { FounderApplicationForm } from '@/components/FounderApplicationForm';
 import { JsonLdSchema } from '@/components/JsonLdSchema';
 import { getPageSeo } from '@/lib/api';
 import { buildMetadata, fallbackPageSchema } from '@/lib/seo';
-import { tone } from '@/lib/voice';
 
 export const metadata = buildMetadata({
-  title: 'Founder Edition — $9,999 · application only',
+  title: 'Founder Edition — $9,999 · 100 spots ever · application only',
   description:
-    'Founder Edition — $9,999. Signed hardcover set (636 books), lifetime Apex Pass, 90-min private call with Brian, embossed signature plate. 100 per year. Application only.',
+    'Founder Edition — $9,999, lifetime. Signed 636-book hardcover set, lifetime Insider Pass to every Apex store, one-hour private call with Brian, your name in the next book’s Founding Operators appendix. Only 100 spots ever sold. Application only.',
   path: '/founder-edition',
 });
 
 export const revalidate = 3600;
 
-// Master §1.6 — locked at $9,999, NOT $14,999. Limited to 100/year.
-// Application form, NOT Stripe Checkout (operating rule #8).
+// Master §1.6 — locked at $9,999. Limited to 100 LIFETIME spots (per the
+// Final Build doc — not 100/year). Application form, NOT Stripe Checkout.
 
 const DELIVERABLES = [
   {
-    title: 'Signed 636-book hardcover set',
-    body: 'Every book Apex Raw Motivation will publish — 12 series × 53 books — hardcover, individually signed and shipped progressively as books release. Storage shelf included.',
+    title: 'The 12-Series Complete Hardcover Set',
+    body: 'All 636 books, hardcover, signed by Brian. Shipped in a custom case as books release. Yes, all 636. Yes, the case is heavy. Yes, you need a shelf.',
   },
   {
-    title: 'Lifetime Pass — every Apex store',
-    body: 'Books Pass, plus every other Apex storefront pass we run, for life. No renewals. No upgrades.',
+    title: 'Lifetime Insider Pass',
+    body: 'Forever. As long as Apex exists. No annual renewal. No price increases. Books Pass, Digital Pass, every other Apex storefront pass we ever launch — you’re in.',
   },
   {
-    title: '90-min private call with Brian',
-    body: 'One scheduled 90-minute call inside the first 90 days. Your operation, your decisions. Brian reads the file beforehand.',
+    title: 'One-Hour Call With Brian',
+    body: 'Scheduled at your pace. Any topic. He’s a carpet guy. He doesn’t have time to bullshit you.',
   },
   {
-    title: 'Embossed signature plate in book #1',
-    body: 'Your name on a custom plate, bound into the inside cover of The Discipline Blueprint — the founding book.',
+    title: 'Your Name in the Next Book',
+    body: '"Founding Operators" appendix. Forever printed. Future readers will see it. The names that funded the empire when it was 12 books deep.',
   },
   {
-    title: 'Numbered 1-100',
-    body: 'Founder Editions are individually numbered. When the 100 are gone for the year, the cohort closes.',
+    title: 'Early Access to Everything Apex Ever Makes',
+    body: 'Books, courses, apparel, AI tools, future brands. You’re in at founder level. Treated accordingly.',
+  },
+  {
+    title: 'Limited to 100 Lifetime Spots',
+    body: 'Not a recurring revenue stream. A one-time founders class. When 100 are sold, the door closes. Forever.',
   },
 ];
 
@@ -52,22 +55,31 @@ export default async function FounderEditionPage() {
       />
 
       <Hero
-        eyebrow="Founder Edition · $9,999"
+        eyebrow="Founder Edition · $9,999 · 100 spots ever"
         title={
           <>
-            <span className="metallic-text">100 per year.</span> Application only.
+            For the 100 people who don&apos;t read the books —{' '}
+            <span className="metallic-text">they build with them.</span>
           </>
         }
-        body={tone.founderHelper}
-        primary={{ href: '#apply', label: 'Apply for Founder Edition' }}
-        secondary={{ href: '/bundles', label: 'Or see the bundles' }}
+        body={
+          <>
+            This isn&apos;t for everyone. This isn&apos;t even for most of the people who buy the
+            books. This is for the max 100 people, ever, who want to be part of the early Apex
+            story.{' '}
+            <span className="text-accent">$9,999. Lifetime. Only 100 spots ever.</span>
+          </>
+        }
+        primary={{ href: '#apply', label: 'Reserve a spot' }}
+        secondary={{ href: '/bundles', label: 'Or just grab a bundle' }}
       />
 
       <section className="container-x py-16">
         <div className="mb-10 max-w-2xl">
-          <p className="eyebrow mb-3">What ships</p>
+          <p className="eyebrow mb-3 text-accent">What you get</p>
           <h2 className="font-display text-3xl text-ink md:text-4xl">
-            Five deliverables. One number — 1 through 100.
+            Six deliverables.{' '}
+            <span className="metallic-text">One number — 1 through 100.</span>
           </h2>
         </div>
         <ol className="grid gap-4 md:grid-cols-2">
@@ -76,23 +88,50 @@ export default async function FounderEditionPage() {
               <span className="font-display text-3xl text-accent">0{i + 1}</span>
               <div>
                 <p className="font-display text-xl text-ink">{d.title}</p>
-                <p className="mt-2 text-sm text-ink-dim">{d.body}</p>
+                <p className="mt-2 text-sm text-ink-dim leading-[1.6]">{d.body}</p>
               </div>
             </li>
           ))}
         </ol>
       </section>
 
+      <section className="container-x py-12">
+        <div className="max-w-3xl mx-auto border border-accent/30 bg-bg-subtle p-8 md:p-10">
+          <p className="eyebrow mb-3 text-accent">The honest version</p>
+          <h2 className="font-display text-2xl text-ink md:text-3xl mb-5">
+            $9,999 is a lot of money.
+          </h2>
+          <div className="space-y-4 text-ink-dim text-base leading-[1.65]">
+            <p>
+              Brian knows what $9,999 feels like to someone serious. He&apos;s been running a
+              business since 2013. He&apos;s seen $9,999 expenses that changed the company and
+              $9,999 expenses that were complete disasters.
+            </p>
+            <p>
+              This is the first one, not the second one — but Brian&apos;s not going to sit here
+              and convince you of that. Either you&apos;re in or you&apos;re not.
+            </p>
+            <p>
+              If you&apos;re considering it: email Brian directly before you buy. He&apos;ll get
+              on the phone. He&apos;ll tell you whether it makes sense for your specific
+              situation. He&apos;ll probably talk some of you out of it. That&apos;s fine.
+              He&apos;d rather have 100 right people than 100 anyone.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section id="apply" className="border-t border-line bg-bg-subtle">
         <div className="container-x py-16">
           <div className="mb-8 max-w-2xl">
-            <p className="eyebrow mb-3">Apply</p>
+            <p className="eyebrow mb-3 text-accent">Apply</p>
             <h2 className="font-display text-3xl text-ink md:text-4xl">
-              Why $9,999 makes sense for you.
+              The application goes to a queue Brian reads personally.
             </h2>
-            <p className="mt-4 text-ink-dim">
-              The application goes to a review queue Brian reads personally. If you fit, you get
-              a calendar invite within 7 days. If not, you get a direct no — no waitlist limbo.
+            <p className="mt-4 text-ink-dim text-base leading-[1.65]">
+              If you fit, you get a calendar invite within 7 days. If not, you get a direct no —
+              no waitlist limbo, no follow-up sequence, no "let&apos;s revisit in Q4." We&apos;re
+              not running a coaching funnel.
             </p>
           </div>
 
@@ -102,23 +141,27 @@ export default async function FounderEditionPage() {
 
       <section className="container-x py-16">
         <div className="border border-line bg-bg-subtle p-6 md:p-8">
-          <p className="eyebrow mb-3">FAQ</p>
+          <p className="eyebrow mb-3 text-accent">FAQ</p>
           <div className="divide-y divide-line">
             <Faq
-              q="Why isn't this just a buy button?"
-              a="Because 100 of these go out per year, total. The form is the filter — it saves both of us a phone call when this is not a fit."
+              q="Why isn’t this just a buy button?"
+              a="Because 100 of these go out, total, ever. The form is the filter — it saves both of us a phone call when this is not a fit."
             />
             <Faq
-              q="What if the 100 are gone this year?"
-              a="The application closes for the year. We notify you when next year's cohort opens. We do not waitlist beyond that — wait is dishonest."
+              q="What if the 100 are gone?"
+              a={"The application closes. Forever. We don’t open a “next cohort” the next year — there are only 100 lifetime spots. We don’t waitlist. Wait is dishonest."}
             />
             <Faq
               q="Do I get the audiobook versions too?"
-              a="Yes. The lifetime Pass covers every audiobook for every Apex store, for life."
+              a="Yes. The lifetime Pass covers every audiobook for every Apex store, for life. The hardcover set is the physical version; the Pass is the audio + future books."
             />
             <Faq
               q="When does my number ship?"
-              a="Book by book, as each title releases. The shelf and signature plate ship within 30 days of acceptance."
+              a="Book by book, as each title releases. The shelf and signature plate ship within 30 days of acceptance. The lifetime Pass is active the same day you’re accepted."
+            />
+            <Faq
+              q="Can I email Brian before I apply?"
+              a="Yes. brian@apexflowlabs.com. He answers his own mail. If you’re close-but-not-sure, write him."
             />
           </div>
         </div>

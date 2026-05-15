@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 
 // "Across the ecosystem" — eleven sister Apex Flow Labs storefronts plus
-// Spiker Rug Werks (the operating company that funded the whole thing).
+// Spiker Carpet and Tile Care (the operating company that funded the whole thing).
 // Patterned on apex-flow-labs `components/home/TileGridShowcase.tsx`
 // (the 9-system tile-cylinder) — flattened into a static grid with
 // hover-tilt + tinted color washes for a cinematic-but-quiet feel.
@@ -144,10 +144,10 @@ const COMPANIES: Company[] = [
   },
   {
     num: '12',
-    label: 'Spiker Rug Werks',
+    label: 'Spiker Carpet and Tile Care',
     tagline: 'The original.',
-    blurb: "Brian's rug-cleaning company since 2010. The 16 years of operations that back-test every Apex book.",
-    href: 'https://spikerrugworks.com',
+    blurb: "Brian's rug-cleaning company since 2013. The 13 years of operations that back-test every Apex book.",
+    href: 'https://spikercarpetandtilecare.com',
     accent: '#D9CC8C',
     accentSoft: 'rgba(217,204,140,0.18)',
     external: true,

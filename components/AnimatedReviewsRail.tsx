@@ -14,7 +14,7 @@ const REVIEWS = [
   },
   {
     quote:
-      'Sixteen years of payroll. You can taste it on every page. Not one chapter feels rented.',
+      'Thirteen years of payroll. You can taste it on every page. Not one chapter feels rented.',
     name: 'D. Kohler',
     role: 'Owner-operator',
     rating: 5,

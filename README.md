@@ -92,8 +92,8 @@ Every public route renders multi-schema JSON-LD via `<JsonLdSchema bundle={…} 
 - Backend `/api/v1/seo/book/<slug>` (or `/seo/series/<slug>` / `/seo/page/<path>`) returns an **array** of schema objects.
 - Each object renders as its own `<script type="application/ld+json">` — never merged.
 - `lib/seo.ts` ships local fallbacks (`Book`, `Person`, `Organization`, `isBasedOn` Spiker, `Review`, `FAQPage`, `Audiobook`, `BreadcrumbList`) so pages still ship structured data even if the backend SEO endpoint is briefly cold.
-- `Person` schema points `sameAs` at `https://spikerrugworks.com` on every page (Master §9.1).
-- `isBasedOn` schema references Spiker Rug Werks operations on every book detail (Master §9.2).
+- `Person` schema points `sameAs` at `https://spikercarpetandtilecare.com` on every page (Master §9.1).
+- `isBasedOn` schema references Spiker Carpet and Tile Care operations on every book detail (Master §9.2).
 
 ## Phase roadmap
 

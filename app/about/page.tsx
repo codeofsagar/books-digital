@@ -8,7 +8,7 @@ import { buildMetadata, fallbackPageSchema } from '@/lib/seo';
 export const metadata = buildMetadata({
   title: 'About Apex Raw Motivation',
   description:
-    'Apex Raw Motivation is the books storefront of Brian Spiker — owner-operator of Spiker Rug Werks for 16 years. Operator-grade self-help, not therapist-speak.',
+    'Apex Raw Motivation is the books storefront of Brian Spiker — owner-operator of Spiker Carpet and Tile Care for 13 years. Operator-grade self-help, not therapist-speak.',
   path: '/about',
 });
 
@@ -30,7 +30,7 @@ export default async function AboutPage() {
             <span className="metallic-text">Back-tested against a real company.</span>
           </>
         }
-        body="Apex Raw Motivation is the books storefront of Brian Spiker. He runs Spiker Rug Werks. Every chapter has to survive contact with that company before it ships."
+        body="Apex Raw Motivation is the books storefront of Brian Spiker. He runs Spiker Carpet and Tile Care. Every chapter has to survive contact with that company before it ships."
       />
 
       <section className="container-x py-16">
@@ -44,7 +44,7 @@ export default async function AboutPage() {
           <div className="space-y-5 text-ink-dim">
             <p>
               The genre is full of advice that sounds great and never gets tested. We picked the
-              opposite path. Every Apex book references real operations from Spiker Rug Werks
+              opposite path. Every Apex book references real operations from Spiker Carpet and Tile Care
               and every Spiker case study has a fact pattern you can verify.
             </p>
             <p>
@@ -67,7 +67,7 @@ export default async function AboutPage() {
             />
             <Block
               title="The proof"
-              body="16 years of operations at Spiker Rug Werks — the page that anchors the authority transfer."
+              body="13 years of operations at Spiker Carpet and Tile Care — the page that anchors the authority transfer."
               href="/brian-spiker-real-world-proof"
             />
             <Block

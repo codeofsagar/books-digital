@@ -112,12 +112,12 @@ export default async function BookDetailPage({ params }: BookRouteProps) {
               <p className="mt-1 text-ink-dim">
                 This book references real operations from{' '}
                 <a
-                  href="https://spikerrugworks.com"
+                  href="https://spikercarpetandtilecare.com"
                   className="underline hover:text-ink"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Spiker Rug Werks
+                  Spiker Carpet and Tile Care
                 </a>
                 . Not a hypothetical.
               </p>

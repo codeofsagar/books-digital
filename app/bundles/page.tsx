@@ -14,34 +14,34 @@ export const metadata = buildMetadata({
 
 export const revalidate = 3600;
 
-// Master §1.5 — locked prices. Never display off-spec.
+// Master §1.5 — locked SKUs. Backend owns the actual product/price config.
 const BUNDLES = [
   {
-    name: 'Series — ebook',
+    name: 'Single-Series Bundle',
     price: '$79',
-    note: '53 books · one full series · ebook only',
-    body: 'Pick any one of the 12 series. All 53 books in ebook format, delivered as a single download bundle.',
+    note: '53 books · one full series · ebook',
+    body: 'Pick any one of the 12 series. All 53 books in ebook. Save ~70% vs. buying them one at a time. For the guy who knows exactly which fight he\'s in.',
     sku: 'series-bundle-ebook',
   },
   {
-    name: 'Series — audio',
+    name: 'Series — Audio',
     price: '$149',
-    note: '53 books · one full series · audiobook library',
-    body: 'All 53 audiobooks of a single series, narrated by Brian via supervised Polly Neural. Listen on the Books Pass player.',
+    note: '53 audiobooks · one full series',
+    body: 'All 53 audiobooks of a single series, narrated savage. For people who do their reading at 65 MPH between job sites.',
     sku: 'series-bundle-audio',
   },
   {
-    name: '12-series ebook',
+    name: 'The Twelve — Ebook Library',
     price: '$499',
-    note: '636 books · all 12 series · ebook only',
-    body: 'The complete library in ebook format. 636 books. One bundled download per series. Lifetime access in your library.',
+    note: '636 books · all 12 series · ebook',
+    body: 'The complete library in ebook. 636 books. Every series. Every chapter. For the guy who doesn\'t want a subscription and just wants to own the whole catalog forever.',
     sku: 'twelve-series-ebook',
   },
   {
-    name: '12-series everything',
+    name: 'The Full Arsenal',
     price: '$1,499',
-    note: '636 books · ebook + audiobook · full library',
-    body: 'Every book, every format. 636 ebooks + 636 audiobooks. The fastest path to running the whole 90-day program across all 12 fronts.',
+    note: '636 books · ebook + audiobook',
+    body: 'Every book, every format. 636 ebooks + 636 audiobooks. The whole 90-day program across all 12 fronts. The cheapest path to the entire library without picking the Pass.',
     sku: 'twelve-series-everything',
   },
 ];
@@ -57,10 +57,11 @@ export default async function BundlesPage() {
         eyebrow="Bundles"
         title={
           <>
-            One series. <span className="metallic-text">Or all twelve.</span>
+            Because buying 53 books one at a time{' '}
+            <span className="metallic-text">is exhausting.</span>
           </>
         }
-        body="Series bundles at $79 ebook or $149 audio. The full library at $499 ebook. The whole arsenal — ebooks + audiobooks for all 636 books — at $1,499."
+        body="Pick a single series at $79. Grab the whole 636-book library in ebook at $499. Or get every book in every format — 636 ebooks + 636 audiobooks — for $1,499 and never think about it again."
       />
 
       <section className="container-x py-16">

@@ -74,7 +74,7 @@ The backend Claude session needs to ship these before this frontend can hit them
 | `GET /api/v1/series/<slug>` | One series + 53 book list ordered by book number | TODO backend |
 | `GET /api/v1/podcast/feed?limit=` | Episode list w/ duration (8-12 min episodes), audio URL, transcript URL, related book slug | TODO backend |
 | `GET /api/v1/podcast/<slug>` | Single episode + related book + transcript + 9 directory subscribe links | TODO backend |
-| `GET /api/v1/seo/book/<slug>` | JSON-LD bundle: `Book` + `Person`(Brian) + `Organization`(Apex Raw Motivation) + `isBasedOn`(Spiker Rug Werks) + `Review` + `FAQPage` + `AudiobookFormat` + `BreadcrumbList` — per Master §6.4 schema density | TODO backend |
+| `GET /api/v1/seo/book/<slug>` | JSON-LD bundle: `Book` + `Person`(Brian) + `Organization`(Apex Raw Motivation) + `isBasedOn`(Spiker Carpet and Tile Care) + `Review` + `FAQPage` + `AudiobookFormat` + `BreadcrumbList` — per Master §6.4 schema density | TODO backend |
 | `GET /api/v1/seo/series/<slug>` | JSON-LD for series pillar page | TODO backend |
 | `GET /api/v1/seo/article/<template>/<slug>` | JSON-LD + content for cluster / best-books / 90-day-program / comparison / reading-guide pages | TODO backend (Phase 3) |
 | `POST /api/v1/lead-magnets/free-chapter` | `{email, bookSlug}` → enqueues delivery email, marks UTM, drops Klaviyo subscriber | TODO backend |
@@ -126,8 +126,8 @@ Build in this order so dependencies flow naturally:
 - `app/podcast/[slug]/page.tsx` — fetch `/api/v1/podcast/<slug>`, embed inline player w/ chapter splits + transcript toggle + speed control + "Read the full book" CTA linking the related book.
 
 ### Day 5 — Authority + commerce surfaces
-- `app/about-brian/page.tsx` — author bio, photo, 16-years-of-Spiker context, Brian-at-job-site photo, link to Spiker Rug Werks.
-- `app/brian-spiker-real-world-proof/page.tsx` — Master §9 Spiker authority transfer. `Person` schema + `isBasedOn` schema on every page, but this page is the deep authority landing. Embedded Spiker reviews (from `/api/v1/spiker/reviews`), job-site photo carousel, 16-year operational timeline, link to spikerrugworks.com w/ reciprocal footer-mention copy.
+- `app/about-brian/page.tsx` — author bio, photo, 16-years-of-Spiker context, Brian-at-job-site photo, link to Spiker Carpet and Tile Care.
+- `app/brian-spiker-real-world-proof/page.tsx` — Master §9 Spiker authority transfer. `Person` schema + `isBasedOn` schema on every page, but this page is the deep authority landing. Embedded Spiker reviews (from `/api/v1/spiker/reviews`), job-site photo carousel, 16-year operational timeline, link to spikercarpetandtilecare.com w/ reciprocal footer-mention copy.
 - `app/membership/page.tsx` — **Books Insider Pass** landing at $99/yr (standalone — DO NOT cross-reference Digital Pass at this tier per Master §1.4). Benefits: full audiobook library streaming, 20% off all hardcovers, monthly bonus episode, early access to new releases. Charter counter via `/api/v1/insider-pass/charter-status` if applicable to books too.
 - `app/bundles/page.tsx` — series bundles at $79 ebook / $149 audio, 12-series complete at $499 ebook / $1,499 everything, Founder Edition entry CTA → `/founder-edition`.
 - `app/founder-edition/page.tsx` — **$9,999** tier landing per Master §1.6. NOT a Stripe Checkout button — an "Apply for Founder Edition" form posting to `/api/v1/founder-edition/apply`. List the 5 deliverables: signed hardcover set (636 books) · lifetime Pass to every Apex store · 90-min private call with Brian · embossed signature plate in book #1 · numbered 1-100.
@@ -290,8 +290,8 @@ Gate Books-Insider-Pass-only content (audiobook streaming, library page, 20%-off
 - [ ] `/robots.txt` allows GPTBot + ClaudeBot + PerplexityBot + Google-Extended + Bingbot per Master §6.6
 - [ ] `/sitemap.xml` lists every book + series + episode URL
 - [ ] Multi-schema JSON-LD renders per Master §6.4 on every public page (validate via Google Rich Results Test)
-- [ ] `Person` schema with `sameAs` linking spikerrugworks.com on every page (Master §9.1)
-- [ ] `isBasedOn` schema referencing Spiker Rug Werks operations on every book detail (Master §9.2)
+- [ ] `Person` schema with `sameAs` linking spikercarpetandtilecare.com on every page (Master §9.1)
+- [ ] `isBasedOn` schema referencing Spiker Carpet and Tile Care operations on every book detail (Master §9.2)
 - [ ] Reduced-motion respected
 - [ ] No console errors / no broken images / no broken audio
 - [ ] Pricing values match Master §1.5 — never display off-spec

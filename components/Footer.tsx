@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { AuthorityFooter } from './AuthorityFooter';
 
 const FOOTER_COLUMNS = [
   {
@@ -65,16 +66,17 @@ export function Footer() {
             </p>
           </div>
           <p className="mt-5 text-sm font-light leading-[1.7] text-ink-dim max-w-xs">
-            636 books. 12 series. One war-manual library. Built on 16 years of operations at{' '}
+            636 books. 12 series. One war-manual library. Written by Brian Spiker —
+            founder of{' '}
             <a
-              href="https://spikerrugworks.com"
+              href="https://spikercarpetandtilecare.com"
               className="text-accent transition-colors hover:text-cream border-b border-[rgba(217,204,140,0.3)] hover:border-cream"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer me"
               target="_blank"
             >
-              Spiker Rug Werks
+              Spiker Carpet and Tile Care
             </a>
-            .
+            , operating since 2013. 13 years of receipts.
           </p>
 
           <div className="mt-8 flex items-center gap-3">
@@ -117,17 +119,29 @@ export function Footer() {
           © {new Date().getUTCFullYear()} Apex Raw Motivation · All rights reserved
         </p>
         <p className="font-mono uppercase tracking-[0.3em]">
-          Sister site ·{' '}
+          Original business ·{' '}
           <a
-            href="https://spikerrugworks.com"
+            href="https://spikercarpetandtilecare.com"
             className="text-accent/80 hover:text-cream transition-colors"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer me"
             target="_blank"
           >
-            spikerrugworks.com
+            spikercarpetandtilecare.com
           </a>
         </p>
       </div>
     </footer>
+  );
+}
+
+// Composed footer — drops the authority block above the existing footer so
+// every page surfaces the 13-year claim + entity-unification link before the
+// site nav columns appear.
+export function FooterWithAuthority() {
+  return (
+    <>
+      <AuthorityFooter />
+      <Footer />
+    </>
   );
 }

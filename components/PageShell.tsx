@@ -1,5 +1,6 @@
 import { Nav } from './Nav';
 import { Footer } from './Footer';
+import { AuthorityFooter } from './AuthorityFooter';
 import { cn } from '@/lib/utils';
 
 interface PageShellProps {
@@ -21,6 +22,7 @@ export function PageShell({ children, className, seriesColor }: PageShellProps) 
     >
       <Nav />
       <main className="flex-1">{children}</main>
+      <AuthorityFooter />
       <Footer />
     </div>
   );

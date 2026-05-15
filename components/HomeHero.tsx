@@ -94,29 +94,29 @@ export function HomeHero({ books, totalBooks }: HomeHeroProps) {
 
       const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
 
-      // Books fire FIRST at the 0.5s mark — they're the visual anchor.
-      // The text animations run in parallel on the same timeline.
+      // Books animate immediately on mount — anchor visual lands first.
+      // Text tweens run in parallel.
       tl.to(
         cardWrappers,
         {
           opacity: (i) => CARD_LAYOUT[i].opacity ?? 1,
           yPercent: 0,
-          duration: 1,
+          duration: 0.9,
           ease: 'power3.out',
         },
-        0.5,
+        0,
       )
-        .to('[data-hero-eyebrow]', { opacity: 1, y: 0, duration: 0.8 }, 0)
-        .to('[data-hero-rail]', { opacity: 1, x: 0, duration: 0.8 }, 0.2)
+        .to('[data-hero-eyebrow]', { opacity: 1, y: 0, duration: 0.6 }, 0)
+        .to('[data-hero-rail]', { opacity: 1, x: 0, duration: 0.6 }, 0.05)
         .to(
           '[data-hero-letter]',
-          { opacity: 1, yPercent: 0, duration: 1.1, stagger: 0.012, ease: 'power4.out' },
-          0.3,
+          { opacity: 1, yPercent: 0, duration: 0.9, stagger: 0.01, ease: 'power4.out' },
+          0.1,
         )
         .to(
           '[data-hero-fade]',
-          { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: 'power3.out' },
-          1.0,
+          { opacity: 1, y: 0, duration: 0.7, stagger: 0.06, ease: 'power3.out' },
+          0.4,
         );
 
       // Carousel rotation cycles all 6 positions in a closed loop.
@@ -201,11 +201,10 @@ export function HomeHero({ books, totalBooks }: HomeHeroProps) {
           <div className="relative flex flex-col justify-center order-2 lg:order-1">
             <p
               data-hero-eyebrow
-              className="mb-8 flex items-center gap-4 text-[11px] uppercase tracking-[0.4em] text-white/60 font-medium will-change-transform"
+              className="mb-6 flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.4em] text-accent font-medium will-change-transform"
             >
-              
-              <span className="h-px w-12 bg-white" />
-              <span>Apex Raw Motivation · The Library</span>
+              <span className="h-px w-12 bg-accent/60" />
+              <span>Most self-help is written by people who&apos;ve never had a real job.</span>
             </p>
 
             <h1 className="font-display text-white flex flex-col items-start leading-[0.88]">
@@ -245,45 +244,92 @@ export function HomeHero({ books, totalBooks }: HomeHeroProps) {
 
             <p
               data-hero-fade
-              className="mt-10 max-w-[440px] text-[1.05rem] font-light leading-[1.6] text-white md:text-lg will-change-transform"
+              className="mt-10 max-w-[500px] text-[1.05rem] font-light leading-[1.65] text-white/85 md:text-lg will-change-transform"
             >
-              Not therapist-speak. Not guru positivity. Operator-grade self-help, written by a
-              man who shipped sixteen years of payroll at{' '}
+              Brian Spiker has cleaned carpets since 2013 —{' '}
               <a
-                href="https://spikerrugworks.com"
+                href="https://spikercarpetandtilecare.com"
                 target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-white transition-colors hover:text-white/80 border-b border-white/30 pb-0.5 hover:border-white"
+                rel="noopener noreferrer me"
+                className="font-medium text-accent transition-colors hover:text-cream border-b border-accent/40 pb-0.5 hover:border-cream"
               >
-                Spiker Rug Werks
-              </a>{' '}
-              before he wrote a word.
+                Spiker Carpet and Tile Care
+              </a>
+              . Carpet cleaning. Upholstery. Tile and grout — clean and seal. Pet odors —
+              enzymes for the urine, treatment for the oils that bake wet-dog smell into your
+              carpet fibers. The stuff most cleaners won&apos;t bother with.
+            </p>
+
+            <p
+              data-hero-fade
+              className="mt-5 max-w-[500px] text-[1.05rem] font-light leading-[1.65] text-white/70 md:text-lg will-change-transform"
+            >
+              He wrote 636 books on the side. They&apos;re{' '}
+              <span className="text-cream">R-rated</span>. They&apos;re{' '}
+              <span className="text-cream">funny</span>. They&apos;ll probably piss you off a
+              little because they&apos;re going to call out the bullshit you&apos;ve been doing.
+              Welcome.
             </p>
 
             <div
               data-hero-fade
-              className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center will-change-transform"
+              className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center will-change-transform"
             >
               <Magnetic>
                 <Link
-                  href="/free-chapter/the-discipline-blueprint"
+                  href="/books/the-discipline-blueprint"
                   className="cta-3d"
-                  data-cursor-label="Send"
+                  data-cursor-label="Start"
                 >
-                  <span>Send Chapter One</span>
+                  <span>Start with Book #1 · $6.99</span>
                   <ArrowUpRight className="h-4 w-4" aria-hidden strokeWidth={2.5} />
                 </Link>
               </Magnetic>
               <Magnetic strength={0.22}>
                 <Link
-                  href="/series"
+                  href="/free-chapter/the-discipline-blueprint"
                   className="cta-3d-ghost"
-                  data-cursor-label="Browse"
+                  data-cursor-label="Free"
                 >
-                  Browse the 12 Series
+                  Free first chapter
+                </Link>
+              </Magnetic>
+              <Magnetic strength={0.18}>
+                <Link
+                  href="/podcast"
+                  className="font-mono text-[11px] uppercase tracking-[0.3em] text-accent/80 transition-colors hover:text-cream border-b border-[rgba(217,204,140,0.3)] hover:border-cream pb-1"
+                  data-cursor-label="Listen"
+                >
+                  Or listen to the podcast →
                 </Link>
               </Magnetic>
             </div>
+
+            <ul
+              data-hero-fade
+              className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-[0.3em] text-white/55 will-change-transform"
+            >
+              <li className="flex items-center gap-2">
+                <span aria-hidden className="h-1.5 w-1.5 rotate-45 bg-accent" />
+                Carpets · Upholstery · Tile &amp; Grout
+              </li>
+              <li className="flex items-center gap-2">
+                <span aria-hidden className="h-1.5 w-1.5 rotate-45 bg-accent" />
+                636 books between jobs
+              </li>
+              <li className="flex items-center gap-2">
+                <span aria-hidden className="h-1.5 w-1.5 rotate-45 bg-accent" />
+                Zero ayahuasca
+              </li>
+              <li className="flex items-center gap-2">
+                <span aria-hidden className="h-1.5 w-1.5 rotate-45 bg-accent" />
+                Zero ice baths
+              </li>
+              <li className="flex items-center gap-2">
+                <span aria-hidden className="h-1.5 w-1.5 rotate-45 bg-accent" />
+                Zero manifestation bullshit
+              </li>
+            </ul>
           </div>
 
           {/* Deck column — appears FIRST on mobile (order-1), shifted upward
@@ -384,7 +430,7 @@ export function HomeHero({ books, totalBooks }: HomeHeroProps) {
               <MarqueeDiamond />
               <MarqueeTag text="No drip · No upsell" />
               <MarqueeDiamond />
-              <MarqueeTag text="Built on sixteen years of payroll" />
+              <MarqueeTag text="Built on thirteen years of payroll" />
               <MarqueeDiamond />
               <MarqueeTag text="Written by an operator, not a guru" />
               <MarqueeDiamond />

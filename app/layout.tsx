@@ -3,7 +3,6 @@ import { Geist, Fraunces, JetBrains_Mono } from 'next/font/google';
 import { env } from '@/lib/env';
 import { SmoothScroll } from '@/components/SmoothScroll';
 import { Cursor } from '@/components/Cursor';
-import { PageTransition } from '@/components/PageTransition';
 import { BackgroundLoader } from '@/components/BackgroundLoader';
 import { BooksConcierge } from '@/components/BooksConcierge';
 import { ExitIntentModalTrigger } from '@/components/EmailCaptureModal';
@@ -35,7 +34,7 @@ export const metadata: Metadata = {
     template: '%s | Apex Raw Motivation',
   },
   description:
-    '636 books. 12 series. One war-manual library. Built on 16 years of operations at Spiker Rug Werks. Not therapist-speak — operator-grade self-help.',
+    '636 books. 12 series. One war-manual library. Built on 13 years of operations at Spiker Carpet and Tile Care. Not therapist-speak — operator-grade self-help.',
   applicationName: 'Apex Raw Motivation',
   authors: [{ name: 'Brian Spiker', url: `${env.siteUrl}/about-brian` }],
   creator: 'Brian Spiker',
@@ -72,7 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <SmoothScroll />
         <Cursor />
-        <PageTransition>{children}</PageTransition>
+        {children}
         <BooksConcierge />
         <ExitIntentModalTrigger />
       </body>

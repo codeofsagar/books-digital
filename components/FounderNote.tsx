@@ -57,7 +57,7 @@ export function FounderNote() {
             </p>
 
             <p>
-              Sixteen years at <span className="metallic-text">Spiker Rug Werks</span> taught me
+              Thirteen years at <span className="metallic-text">Spiker Carpet and Tile Care</span> taught me
               that real discipline is not a vibe — it is a Tuesday morning. It is the second
               hour after a sleepless night. It is the email you don't want to send. The books
               are the field notes from those Tuesdays.
@@ -86,7 +86,7 @@ export function FounderNote() {
               <p className="mt-2 text-xs uppercase tracking-[0.3em] text-ink-mute">
                 Founder · Apex Raw Motivation
                 <br />
-                Owner-operator · Spiker Rug Werks
+                Owner-operator · Spiker Carpet and Tile Care
               </p>
             </div>
           </div>

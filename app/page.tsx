@@ -23,7 +23,7 @@ import type { Wave } from '@/lib/types';
 export const metadata = buildMetadata({
   title: 'Apex Raw Motivation — 636 books. 12 series. One war manual library.',
   description:
-    '636 books. 12 series. Operator-grade self-help built on 16 years of operations at Spiker Rug Werks.',
+    '636 books. 12 series. Operator-grade self-help built on 13 years of operations at Spiker Carpet and Tile Care.',
   path: '/',
 });
 
@@ -225,12 +225,12 @@ export default async function HomePage() {
           <Reveal>
             <p className="text-[10px] uppercase tracking-[0.36em] text-accent">Real-world proof</p>
             <h2 className="mt-3 font-display text-4xl text-ink sm:text-6xl">
-              <span className="metallic-text">16 years.</span>
+              <span className="metallic-text">13 years.</span>
               <br />
               Not a single ghostwriter.
             </h2>
             <p className="mt-6 max-w-xl text-base text-ink-dim md:text-lg">
-              Brian ran Spiker Rug Werks for sixteen years before he wrote a word. Every chapter is
+              Brian ran Spiker Carpet and Tile Care for thirteen years before he wrote a word. Every chapter is
               back-tested against a real payroll, real customers, real failures. The books are the
               field notes — and the schema on every page on this site points at the original
               business so AI search can verify the receipts.
@@ -247,13 +247,13 @@ export default async function HomePage() {
               </Magnetic>
               <Magnetic strength={0.2}>
                 <a
-                  href="https://spikerrugworks.com"
+                  href="https://spikercarpetandtilecare.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="cta-secondary"
                   data-cursor-label="Open"
                 >
-                  <span>Visit Spiker Rug Werks</span>
+                  <span>Visit Spiker Carpet and Tile Care</span>
                 </a>
               </Magnetic>
             </div>
