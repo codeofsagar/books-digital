@@ -94,27 +94,29 @@ export function HomeHero({ books, totalBooks }: HomeHeroProps) {
 
       const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
 
-      tl.to('[data-hero-eyebrow]', { opacity: 1, y: 0, duration: 0.8 })
-        .to('[data-hero-rail]', { opacity: 1, x: 0, duration: 0.8 }, '-=0.4')
+      // Books fire FIRST at the 0.5s mark — they're the visual anchor.
+      // The text animations run in parallel on the same timeline.
+      tl.to(
+        cardWrappers,
+        {
+          opacity: (i) => CARD_LAYOUT[i].opacity ?? 1,
+          yPercent: 0,
+          duration: 1,
+          ease: 'power3.out',
+        },
+        0.5,
+      )
+        .to('[data-hero-eyebrow]', { opacity: 1, y: 0, duration: 0.8 }, 0)
+        .to('[data-hero-rail]', { opacity: 1, x: 0, duration: 0.8 }, 0.2)
         .to(
           '[data-hero-letter]',
-          { opacity: 1, yPercent: 0, duration: 1.2, stagger: 0.012, ease: 'power4.out' },
-          '-=0.6'
-        )
-        .to(
-          cardWrappers,
-          {
-            opacity: (i) => CARD_LAYOUT[i].opacity ?? 1,
-            yPercent: 0,
-            duration: 1.2,
-            ease: 'power3.out',
-          },
-          '-=0.7'
+          { opacity: 1, yPercent: 0, duration: 1.1, stagger: 0.012, ease: 'power4.out' },
+          0.3,
         )
         .to(
           '[data-hero-fade]',
           { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: 'power3.out' },
-          '-=0.6'
+          1.0,
         );
 
       // Carousel rotation cycles all 6 positions in a closed loop.
