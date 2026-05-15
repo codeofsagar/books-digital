@@ -1,0 +1,687 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Geist', system-ui, sans-serif;
+  --font-display: 'Fraunces', 'Georgia', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Palette: navy #001428 · forest #4A5C44 · khaki #D9CC8C · cream #FFE1D0 */
+  --series-color: #D9CC8C;
+  --series-color-soft: rgba(217, 204, 140, 0.15);
+  --series-color-line: rgba(217, 204, 140, 0.4);
+  --forest: #4A5C44;
+  --khaki: #D9CC8C;
+  --cream: #FFE1D0;
+  --navy: #001428;
+}
+
+html {
+  /* transparent so the fixed AuroraBackground (z-index -10) is the bg */
+  background-color: transparent;
+  color-scheme: dark;
+}
+
+body {
+  /* pure black canvas; shader paints the green over it */
+  background-color: #000;
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-feature-settings: 'ss01', 'cv11', 'cv01';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Optical sizing + tighter character for the display serif (Fraunces) */
+.font-display {
+  font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  font-feature-settings: 'ss01', 'ss02', 'liga', 'dlig';
+}
+
+/* Site-wide typographic base — every heading defaults to the editorial serif,
+   every label-ish element to the mono. Stops random elements from falling
+   back to system fonts. */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  font-feature-settings: 'ss01', 'ss02', 'liga', 'dlig';
+  letter-spacing: -0.01em;
+}
+
+p, li, span, a, button, input, textarea, select, label {
+  font-family: inherit;
+}
+
+code, pre, kbd, samp, .font-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: 'zero', 'ss02';
+}
+
+/* Hide the native cursor on devices that have a precise pointer so the
+   custom Cursor component is the only thing the user sees. */
+@media (pointer: fine) {
+  body,
+  body * {
+    cursor: none !important;
+  }
+}
+
+/* Filmic grain disabled — clean background. */
+
+#__next, body > div, main, header, footer {
+  position: relative;
+  z-index: 2;
+}
+
+::selection {
+  background-color: #D9CC8C;
+  color: #000;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #060606;
+}
+::-webkit-scrollbar-thumb {
+  background: #4A5C44;
+  border: 2px solid #000;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D9CC8C;
+}
+
+@layer components {
+  .metallic-text {
+    background: linear-gradient(
+      120deg,
+      #D9CC8C 0%,
+      #FFE1D0 25%,
+      #D9CC8C 45%,
+      #4A5C44 60%,
+      #FFE1D0 75%,
+      #D9CC8C 100%
+    );
+    background-size: 250% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: shimmer 7s linear infinite;
+  }
+
+  .metallic-curtain {
+    background:
+      linear-gradient(
+        135deg,
+        #000 0%,
+        #001428 18%,
+        #4A5C44 32%,
+        #D9CC8C 42%,
+        #FFE1D0 52%,
+        #D9CC8C 62%,
+        #4A5C44 80%,
+        #000 100%
+      );
+    background-size: 200% 200%;
+    animation: curtain 1.2s linear infinite;
+  }
+
+  /* Legacy aliases — redirect any existing .cta-primary / .cta-secondary usage
+     to the new 3D pillow buttons so the whole site adopts the theme.
+     Sized smaller than .cta-3d so they fit nav / banners / inline use without
+     stretching their slot. Per-instance size utilities (px-/py-/text-) still
+     win because Tailwind utilities load after this layer. */
+  .cta-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.7rem;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    color: #001428;
+    isolation: isolate;
+    background:
+      linear-gradient(
+        180deg,
+        #2E3A2A 0%, #4A5C44 8%, #8A8F55 22%,
+        #D9CC8C 42%, #F2E2A6 50%, #D9CC8C 58%,
+        #8A8F55 78%, #4A5C44 92%, #2E3A2A 100%
+      );
+    border: 1px solid #1F2A1C;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+      0 1px 0 rgba(0, 0, 0, 0.55),
+      0 18px 36px -10px rgba(217, 204, 140, 0.4),
+      0 14px 28px -8px rgba(0, 0, 0, 0.7);
+    transition:
+      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.35s ease;
+  }
+  .cta-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 45%, rgba(255, 240, 190, 0.55) 0%, rgba(255, 240, 190, 0) 60%),
+      radial-gradient(ellipse 120% 100% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.35) 100%);
+    pointer-events: none;
+    z-index: -1;
+    transform: none;
+  }
+  .cta-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.55) 50%, transparent 62%);
+    transform: translateX(-110%);
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+  .cta-primary:hover {
+    color: #001428;
+    transform: translateY(-2px);
+    filter: saturate(1.1) brightness(1.04);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+      0 1px 0 rgba(0, 0, 0, 0.6),
+      0 28px 52px -12px rgba(217, 204, 140, 0.6),
+      0 18px 34px -8px rgba(0, 0, 0, 0.75);
+  }
+  .cta-primary:hover::before { transform: none; }
+  .cta-primary:hover::after { transform: translateX(110%); }
+  .cta-primary:active {
+    transform: translateY(0);
+    filter: saturate(1);
+    box-shadow:
+      inset 0 2px 5px rgba(0, 0, 0, 0.55),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.15),
+      0 6px 14px -4px rgba(0, 0, 0, 0.6);
+  }
+  .cta-primary > * { position: relative; z-index: 1; }
+
+  .cta-secondary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.7rem;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    color: #D9CC8C;
+    background:
+      linear-gradient(180deg, #2E3A2A 0%, #1A2218 50%, #2E3A2A 100%);
+    border: 1px solid #1F2A1C;
+    box-shadow:
+      inset 0 1px 0 rgba(217, 204, 140, 0.18),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.6),
+      0 14px 28px -10px rgba(0, 0, 0, 0.7);
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .cta-secondary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 45%, rgba(217, 204, 140, 0.12) 0%, transparent 65%);
+    pointer-events: none;
+    transform: none;
+  }
+  .cta-secondary:hover {
+    color: #FFE1D0;
+    border-color: rgba(217, 204, 140, 0.55);
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 225, 208, 0.25),
+      0 24px 42px -12px rgba(217, 204, 140, 0.3),
+      0 14px 28px -8px rgba(0, 0, 0, 0.75);
+  }
+  .cta-secondary:hover::before { transform: none; }
+  .cta-secondary > * { position: relative; z-index: 1; }
+
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply text-xs uppercase tracking-widest text-ink-dim;
+  }
+
+  .hairline {
+    @apply border-t border-line;
+  }
+
+  /* Tilt-on-hover for book covers — Master §2.10 detail #8 */
+  .tilt-card {
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .tilt-card:hover {
+    transform: perspective(900px) rotateY(-12deg) rotateX(4deg) translateZ(20px);
+  }
+  .tilt-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      120deg,
+      transparent 30%,
+      rgba(255, 243, 196, 0.18) 50%,
+      transparent 70%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .tilt-card:hover::after {
+    transform: translateX(100%);
+  }
+
+  /* Custom cursor — minimal. The component owns the styling; this rule only
+     handles the hover swap (component toggles `.cursor-ring-hover`). */
+  .cursor-ring-hover {
+    width: 44px !important;
+    height: 44px !important;
+    border-color: rgba(217, 204, 140, 0.9) !important;
+  }
+  @media (pointer: coarse) {
+    .cursor-ring,
+    .cursor-ring-hover {
+      display: none !important;
+    }
+  }
+
+  /* Underline-on-hover for inline links inside long-form copy */
+  .copy-link {
+    position: relative;
+    display: inline-block;
+  }
+  .copy-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 1px;
+    background: currentColor;
+    transform-origin: right center;
+    transform: scaleX(0);
+    transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+  }
+  .copy-link:hover::after {
+    transform-origin: left center;
+    transform: scaleX(1);
+  }
+
+  /* 3D pillow CTA — dark forest top/bottom, bright khaki-gold core.
+     Replicates the olive→gold→olive vertical band from the reference button. */
+  .cta-3d {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    padding: 0.95rem 1.9rem;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.72rem;
+    line-height: 1;
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    color: #001428;
+    isolation: isolate;
+    background:
+      linear-gradient(
+        180deg,
+        #2E3A2A 0%,
+        #4A5C44 8%,
+        #8A8F55 22%,
+        #D9CC8C 42%,
+        #F2E2A6 50%,
+        #D9CC8C 58%,
+        #8A8F55 78%,
+        #4A5C44 92%,
+        #2E3A2A 100%
+      );
+    border: 1px solid #1F2A1C;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+      0 1px 0 rgba(0, 0, 0, 0.55),
+      0 18px 36px -10px rgba(217, 204, 140, 0.4),
+      0 14px 28px -8px rgba(0, 0, 0, 0.7);
+    transition:
+      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.35s ease;
+  }
+  /* Specular highlight + edge vignette over the gradient */
+  .cta-3d::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 45%, rgba(255, 240, 190, 0.55) 0%, rgba(255, 240, 190, 0) 60%),
+      radial-gradient(ellipse 120% 100% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.35) 100%);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .cta-3d::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background:
+      linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.55) 50%, transparent 62%);
+    transform: translateX(-110%);
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+  .cta-3d:hover {
+    transform: translateY(-2px);
+    filter: saturate(1.1) brightness(1.04);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+      0 1px 0 rgba(0, 0, 0, 0.6),
+      0 28px 52px -12px rgba(217, 204, 140, 0.6),
+      0 18px 34px -8px rgba(0, 0, 0, 0.75);
+  }
+  .cta-3d:hover::after { transform: translateX(110%); }
+  .cta-3d:active {
+    transform: translateY(0);
+    filter: saturate(1);
+    box-shadow:
+      inset 0 2px 5px rgba(0, 0, 0, 0.55),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.15),
+      0 6px 14px -4px rgba(0, 0, 0, 0.6);
+  }
+  .cta-3d > * { position: relative; z-index: 1; }
+
+  /* Ghost twin — dark forest pillow with khaki text. Matches family. */
+  .cta-3d-ghost {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.95rem 1.75rem;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.72rem;
+    line-height: 1;
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    color: #D9CC8C;
+    background:
+      linear-gradient(180deg, #2E3A2A 0%, #1A2218 50%, #2E3A2A 100%);
+    border: 1px solid #1F2A1C;
+    box-shadow:
+      inset 0 1px 0 rgba(217, 204, 140, 0.18),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.6),
+      0 14px 28px -10px rgba(0, 0, 0, 0.7);
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .cta-3d-ghost::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 45%, rgba(217, 204, 140, 0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .cta-3d-ghost:hover {
+    color: #FFE1D0;
+    border-color: rgba(217, 204, 140, 0.55);
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 225, 208, 0.25),
+      0 24px 42px -12px rgba(217, 204, 140, 0.3),
+      0 14px 28px -8px rgba(0, 0, 0, 0.75);
+  }
+  .cta-3d-ghost > * { position: relative; z-index: 1; }
+
+  /* Marquee stat row — palette-tinted, infinite. */
+  .marquee-stats {
+    mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  }
+
+  /* Award-winning surface utilities — theme-tinted glass for cards, panels. */
+  .surface-elevated {
+    position: relative;
+    background:
+      linear-gradient(180deg, rgba(74, 92, 68, 0.12) 0%, rgba(0, 20, 40, 0.55) 100%);
+    border: 1px solid rgba(217, 204, 140, 0.18);
+    border-radius: 1.5rem;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow:
+      inset 0 1px 0 rgba(217, 204, 140, 0.12),
+      inset 0 0 0 1px rgba(0, 0, 0, 0.3),
+      0 30px 60px -20px rgba(0, 0, 0, 0.6);
+  }
+  .surface-elevated::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      radial-gradient(120% 80% at 20% 0%, rgba(217, 204, 140, 0.08) 0%, transparent 40%),
+      radial-gradient(120% 80% at 80% 100%, rgba(74, 92, 68, 0.12) 0%, transparent 40%);
+  }
+
+  /* Gold-leaf text gradient — for hero numerals and key emphasis. */
+  .text-gold {
+    background: linear-gradient(180deg, #F2E2A6 0%, #D9CC8C 35%, #9F8F4A 80%, #FFE1D0 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+  }
+  .text-cream {
+    background: linear-gradient(180deg, #FFE1D0 0%, #D9CC8C 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  /* Themed eyebrow — replaces plain uppercase labels with a refined rail. */
+  .eyebrow-rail {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.4em;
+    color: rgba(217, 204, 140, 0.7);
+  }
+  .eyebrow-rail::before {
+    content: '';
+    width: 2.5rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #D9CC8C 100%);
+  }
+
+  /* Section divider with khaki diamond — award-style hairline */
+  .section-divider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4rem 0;
+  }
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(217, 204, 140, 0.35) 50%, transparent 100%);
+  }
+  .section-divider span {
+    width: 8px;
+    height: 8px;
+    margin: 0 1.5rem;
+    transform: rotate(45deg);
+    background: linear-gradient(135deg, #D9CC8C 0%, #4A5C44 100%);
+    box-shadow: 0 0 12px rgba(217, 204, 140, 0.5);
+  }
+
+  /* Pill */
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-line bg-bg-subtle px-3 py-1 text-[11px] uppercase tracking-widest text-ink-dim;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 250% 50%; }
+}
+
+@keyframes drift {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(4%, -3%) rotate(2deg); }
+}
+
+/* Aurora drift — used by AuroraBackground.tsx + GoldenSweep.tsx for the
+   streaky animated bands. Drives the after:animate-aurora utility too. */
+@keyframes aurora {
+  0% {
+    background-position: 50% 50%, 50% 50%;
+  }
+  100% {
+    background-position: 350% 50%, 350% 50%;
+  }
+}
+
+.after\:animate-aurora::after {
+  animation: aurora 60s linear infinite;
+}
+
+/* Gold sweep used by GoldenSweep.tsx — the quiet site-wide bg */
+@keyframes sweep {
+  0% { transform: translate(0%, 0%) rotate(0deg); }
+  100% { transform: translate(8%, -6%) rotate(3deg); }
+}
+@keyframes sweep-band {
+  0%, 100% { transform: translateY(-20%); opacity: 0.5; }
+  50% { transform: translateY(20%); opacity: 1; }
+}
+
+@keyframes curtain {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes scroll-x {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-fwd {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* Override the opaque bg-* utilities so the gold sweep bleeds through every
+   section, card, and surface. All overrides are neutral pure-black with
+   alpha — never tinted — so the only second color on the canvas stays gold. */
+@layer utilities {
+  .bg-bg {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .bg-bg-subtle {
+    background-color: rgba(0, 0, 0, 0.55) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .bg-bg-raised {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  .marquee {
+    animation: scroll-x 60s linear infinite;
+  }
+  .marquee:hover {
+    animation-play-state: paused;
+  }
+  .animate-marquee-fwd {
+    animation: marquee-fwd linear infinite;
+  }
+  .animate-marquee-reverse {
+    animation: marquee-reverse linear infinite;
+  }
+  .animate-marquee-fwd:hover,
+  .animate-marquee-reverse:hover {
+    animation-play-state: paused;
+  }
+  .glow-accent {
+    box-shadow: 0 0 0 1px rgba(217, 204, 140, 0.4),
+      0 12px 40px -10px rgba(217, 204, 140, 0.35);
+  }
+  .stroke-text {
+    -webkit-text-stroke: 1px #D9CC8C;
+    color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

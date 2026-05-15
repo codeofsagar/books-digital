@@ -1,0 +1,536 @@
+'use client';
+
+import Link from 'next/link';
+import Image, { type StaticImageData } from 'next/image';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ArrowUpRight } from 'lucide-react';
+import type { BookSummary } from '@/lib/types';
+import { imageProxy } from '@/lib/utils';
+import { Magnetic } from './Magnetic';
+
+// Static book covers shipped from /public — imported so Next.js can optimise
+// them and we get a stable bundle reference per slot (no `${i + 1}` template
+// guessing).
+import b1 from '../public/b1.png';
+import b2 from '../public/b2.png';
+import b3 from '../public/b3.png';
+import b4 from '../public/b4.png';
+import b5 from '../public/b5.png';
+import b6 from '../public/b6.png';
+
+interface HomeHeroProps {
+  books: BookSummary[];
+  totalBooks: number;
+}
+
+// Explicit 1:1 mapping of card slot → imported book asset. Each of b1–b6
+// appears exactly once across the 6 cards.
+const HERO_BOOK_IMAGES: StaticImageData[] = [
+  b1, // slot 0 · CENTER-LEFT
+  b2, // slot 1 · CENTER-RIGHT
+  b3, // slot 2 · MID-LEFT
+  b4, // slot 3 · MID-RIGHT
+  b5, // slot 4 · FAR-LEFT
+  b6, // slot 5 · FAR-RIGHT
+];
+
+// 4 visible positions + 2 off-screen "queue" slots. 6 covers cycle through
+// these 6 slots so only 4 books are seen at any given moment, but every cover
+// gets stage time as the carousel rotates. Sizes are +20% vs. the previous
+// spread for stronger visual presence.
+const CARD_LAYOUT: Array<{ left: string; top: string; w: string; z: number; rot: number; opacity?: number }> = [
+  { left: '34%',  top: '50%', w: '46%', z: 60, rot: -2 }, // 0 · CENTER-LEFT
+  { left: '66%',  top: '50%', w: '46%', z: 60, rot: 2 },  // 1 · CENTER-RIGHT
+  { left: '8%',   top: '50%', w: '38%', z: 45, rot: -6 }, // 2 · MID-LEFT
+  { left: '92%',  top: '50%', w: '38%', z: 45, rot: 6 },  // 3 · MID-RIGHT
+  { left: '-30%', top: '50%', w: '32%', z: 20, rot: -10, opacity: 0 }, // 4 · QUEUE-LEFT
+  { left: '130%', top: '50%', w: '32%', z: 20, rot: 10,  opacity: 0 }, // 5 · QUEUE-RIGHT
+];
+
+export function HomeHero({ books, totalBooks }: HomeHeroProps) {
+  const root = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    let carouselTimer: gsap.core.Tween;
+    
+    const ctx = gsap.context(() => {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      if (reduced) {
+        gsap.set('[data-hero-fade], [data-hero-letter], [data-hero-card], [data-hero-rail], [data-hero-eyebrow]', {
+          opacity: 1, y: 0, x: 0, rotate: 0, scale: 1, yPercent: 0
+        });
+        gsap.set('[data-hero-card-wrapper]', {
+          left: (i) => CARD_LAYOUT[i].left,
+          top: (i) => CARD_LAYOUT[i].top,
+          width: (i) => CARD_LAYOUT[i].w,
+          zIndex: (i) => CARD_LAYOUT[i].z,
+          rotation: (i) => CARD_LAYOUT[i].rot,
+          opacity: (i) => CARD_LAYOUT[i].opacity ?? 1,
+        });
+        return;
+      }
+
+      // GSAP is now the ONLY thing handling the transforms/opacity
+      gsap.set('[data-hero-eyebrow]', { opacity: 0, y: 16 });
+      gsap.set('[data-hero-fade]', { opacity: 0, y: 24 });
+      gsap.set('[data-hero-letter]', { opacity: 0, yPercent: 120 });
+      gsap.set('[data-hero-rail]', { opacity: 0, x: -20 });
+
+      const cardWrappers = gsap.utils.toArray<HTMLElement>('[data-hero-card-wrapper]');
+
+      // Set every card to its final position immediately — only opacity + y
+      // are animated so all 6 books appear together, not one by one.
+      gsap.set(cardWrappers, {
+        left: (i) => CARD_LAYOUT[i].left,
+        top: '50%',
+        width: (i) => CARD_LAYOUT[i].w,
+        rotation: (i) => CARD_LAYOUT[i].rot,
+        zIndex: (i) => CARD_LAYOUT[i].z,
+        opacity: 0,
+        yPercent: 8,
+      });
+
+      const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+
+      tl.to('[data-hero-eyebrow]', { opacity: 1, y: 0, duration: 0.8 })
+        .to('[data-hero-rail]', { opacity: 1, x: 0, duration: 0.8 }, '-=0.4')
+        .to(
+          '[data-hero-letter]',
+          { opacity: 1, yPercent: 0, duration: 1.2, stagger: 0.012, ease: 'power4.out' },
+          '-=0.6'
+        )
+        .to(
+          cardWrappers,
+          {
+            opacity: (i) => CARD_LAYOUT[i].opacity ?? 1,
+            yPercent: 0,
+            duration: 1.2,
+            ease: 'power3.out',
+          },
+          '-=0.7'
+        )
+        .to(
+          '[data-hero-fade]',
+          { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: 'power3.out' },
+          '-=0.6'
+        );
+
+      // Carousel rotation cycles all 6 positions in a closed loop.
+      let currentPositions = [0, 1, 2, 3, 4, 5];
+      const nextPosMap: Record<number, number> = { 0: 2, 2: 4, 4: 5, 5: 3, 3: 1, 1: 0 };
+
+      const playCarousel = () => {
+        carouselTimer = gsap.delayedCall(4.5, () => {
+          currentPositions = currentPositions.map((p) => nextPosMap[p]);
+
+          currentPositions.forEach((posIndex, cardIndex) => {
+            const wrapper = cardWrappers[cardIndex];
+            const pos = CARD_LAYOUT[posIndex];
+
+            gsap.to(wrapper, {
+              left: pos.left,
+              width: pos.w,
+              rotation: pos.rot,
+              zIndex: pos.z,
+              opacity: pos.opacity ?? 1,
+              roundProps: 'zIndex',
+              duration: 1.4,
+              ease: 'power3.inOut',
+            });
+          });
+          playCarousel();
+        });
+      };
+
+      tl.call(playCarousel);
+
+      const innerCards = gsap.utils.toArray<HTMLElement>('[data-hero-card]');
+      const onMove = (e: PointerEvent) => {
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+        const ry = (e.clientX - cx) / cx;
+        const rx = (e.clientY - cy) / cy;
+        
+        innerCards.forEach((card, i) => {
+          const depth = (i + 1) / innerCards.length;
+          gsap.to(card, {
+            x: ry * 28 * depth,
+            y: rx * 20 * depth,
+            rotateX: rx * -4 * depth,
+            rotateY: ry * 6 * depth,
+            duration: 1.2,
+            ease: 'power3.out',
+            transformPerspective: 1200,
+            transformOrigin: 'center',
+          });
+        });
+      };
+      
+      window.addEventListener('pointermove', onMove);
+      return () => window.removeEventListener('pointermove', onMove);
+      
+    }, root);
+
+    return () => {
+      if (carouselTimer) carouselTimer.kill();
+      ctx.revert();
+    };
+  }, []);
+
+  const rawFeatured = books.slice(0, 6);
+  const renderCards = rawFeatured.length === 6
+    ? rawFeatured
+    : [...rawFeatured, ...Array.from({ length: 6 - rawFeatured.length }).map(() => null)];
+
+  return (
+    <section
+      ref={root}
+      className="relative isolate flex min-h-[100vh] w-full flex-col overflow-hidden text-white"
+    >
+      
+
+      <div className="relative z-10 flex-1 flex items-center">
+        <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-10 px-6 py-10 lg:grid-cols-[1.1fr_1fr] lg:gap-20 lg:px-10 lg:py-12">
+
+          {/* Text column — appears AFTER the deck on mobile (order-2), reverts
+              to grid order on lg+ */}
+          <div className="relative flex flex-col justify-center order-2 lg:order-1">
+            <p
+              data-hero-eyebrow
+              className="mb-8 flex items-center gap-4 text-[11px] uppercase tracking-[0.4em] text-white/60 font-medium will-change-transform"
+            >
+              
+              <span className="h-px w-12 bg-white" />
+              <span>Apex Raw Motivation · The Library</span>
+            </p>
+
+            <h1 className="font-display text-white flex flex-col items-start leading-[0.88]">
+              <div className="flex items-start gap-5">
+                
+                <HeroLine
+                  text="636"
+                  className="text-[clamp(5.5rem,12vw,11rem)] font-light tracking-[-0.045em] text-white leading-[0.85]"
+                  inline
+                />
+              </div>
+
+              <HeroLine
+                text="operator books,"
+                className="mt-5 text-[clamp(1.4rem,2.6vw,2.1rem)] italic font-extralight text-white tracking-tight"
+              />
+
+              <div className="flex flex-wrap items-baseline gap-x-3 lg:gap-x-5 mt-2">
+                <HeroLine
+                  text="one"
+                  className="text-[clamp(2.2rem,4.4vw,3.5rem)] italic font-extralight text-white tracking-tight"
+                  inline
+                />
+                <HeroLine
+                  text="war manual."
+                  className="text-[clamp(4.2rem,8.8vw,7.8rem)] font-medium tracking-[-0.045em] lowercase text-white"
+                  inline
+                />
+              </div>
+
+              <span
+                data-hero-rail
+                aria-hidden
+                className="mt-6 h-px w-20 bg-white/30 will-change-transform"
+              />
+            </h1>
+
+            <p
+              data-hero-fade
+              className="mt-10 max-w-[440px] text-[1.05rem] font-light leading-[1.6] text-white md:text-lg will-change-transform"
+            >
+              Not therapist-speak. Not guru positivity. Operator-grade self-help, written by a
+              man who shipped sixteen years of payroll at{' '}
+              <a
+                href="https://spikerrugworks.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-white transition-colors hover:text-white/80 border-b border-white/30 pb-0.5 hover:border-white"
+              >
+                Spiker Rug Werks
+              </a>{' '}
+              before he wrote a word.
+            </p>
+
+            <div
+              data-hero-fade
+              className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center will-change-transform"
+            >
+              <Magnetic>
+                <Link
+                  href="/free-chapter/the-discipline-blueprint"
+                  className="cta-3d"
+                  data-cursor-label="Send"
+                >
+                  <span>Send Chapter One</span>
+                  <ArrowUpRight className="h-4 w-4" aria-hidden strokeWidth={2.5} />
+                </Link>
+              </Magnetic>
+              <Magnetic strength={0.22}>
+                <Link
+                  href="/series"
+                  className="cta-3d-ghost"
+                  data-cursor-label="Browse"
+                >
+                  Browse the 12 Series
+                </Link>
+              </Magnetic>
+            </div>
+          </div>
+
+          {/* Deck column — appears FIRST on mobile (order-1), shifted upward
+              with negative top margin so the books read closer to the top. */}
+          <div className="relative h-[52vh] min-h-[400px] lg:h-[88vh] lg:min-h-[700px] order-1 lg:order-2 -mt-2 lg:-mt-6">
+            
+
+            <div
+              data-hero-deck
+              className="absolute inset-0"
+              style={{ transformStyle: 'preserve-3d', perspective: '1200px' }}
+            >
+              {renderCards.map((book, i) => {
+                const isBook = typeof book === 'object' && book && 'slug' in book;
+                const b = isBook ? (book as BookSummary) : null;
+                
+                return (
+                  <div
+                    key={b?.slug ?? i}
+                    data-hero-card-wrapper
+                    className="absolute aspect-[2/3]"
+                    style={{ transform: 'translate(-50%, -50%)' }}
+                  >
+                    <div
+                      data-hero-card
+                      className="relative h-full w-full will-change-transform"
+                    >
+                      <CoverFrame
+                        book={b}
+                        index={i}
+                        srcOverride={HERO_BOOK_IMAGES[i]}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+
+              <span
+                data-hero-rail
+                className="absolute -bottom-4 left-0 flex items-center gap-4 text-[11px] uppercase tracking-[0.35em] text-white/50 font-medium will-change-transform"
+              >
+                <span className="font-mono">FEATURED · 06 OF {totalBooks > 0 ? totalBooks : '636'}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+     
+
+      <div
+        data-hero-fade
+        className="relative z-10 overflow-hidden border-y border-[rgba(217,204,140,0.22)] bg-black will-change-transform"
+      >
+        <div
+          className="flex animate-marquee-fwd whitespace-nowrap py-6"
+          style={{ animationDuration: '42s' }}
+        >
+          {[0, 1].map((dup) => (
+            <div key={dup} className="flex shrink-0 items-center" aria-hidden={dup === 1}>
+              <MarqueeWord text={totalBooks > 0 ? `${totalBooks.toLocaleString()} BOOKS` : '636 BOOKS'} />
+              <MarqueeDot />
+              <MarqueeWord text="12 SERIES" />
+              <MarqueeDot />
+              <MarqueeWord text="04 WAVES" />
+              <MarqueeDot />
+              <MarqueeWord text="ONE WAR MANUAL" />
+              <MarqueeDot />
+              <MarqueeWord text="90 CHAPTERS" />
+              <MarqueeDot />
+              <MarqueeWord text="16 YEARS LIVE" />
+              <MarqueeDot />
+              <MarqueeWord text="NO UPSELL" />
+              <MarqueeDot />
+              <MarqueeWord text="OPERATOR GRADE" />
+              <MarqueeDot />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div
+        data-hero-fade
+        className="relative z-10 overflow-hidden border-b border-[rgba(255,225,208,0.22)] will-change-transform"
+        style={{ backgroundColor: '#4A5C44' }}
+      >
+        <div
+          className="flex animate-marquee-reverse whitespace-nowrap py-4"
+          style={{ animationDuration: '55s' }}
+        >
+          {[0, 1].map((dup) => (
+            <div key={dup} className="flex shrink-0 items-center" aria-hidden={dup === 1}>
+              <MarqueeTag text="Scroll · The Foundation" icon />
+              <MarqueeDiamond />
+              <MarqueeTag text="Operator-grade · not guru-grade" />
+              <MarqueeDiamond />
+              <MarqueeTag text="90 chapters · 90 days · one book" />
+              <MarqueeDiamond />
+              <MarqueeTag text="No drip · No upsell" />
+              <MarqueeDiamond />
+              <MarqueeTag text="Built on sixteen years of payroll" />
+              <MarqueeDiamond />
+              <MarqueeTag text="Written by an operator, not a guru" />
+              <MarqueeDiamond />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HeroLine({
+  text,
+  className,
+  inline,
+}: {
+  text: string;
+  className?: string;
+  inline?: boolean;
+}) {
+  const Tag = inline ? 'span' : 'div';
+  const words = text.split(' ');
+  
+  return (
+    <Tag className={`relative overflow-hidden ${inline ? 'inline-flex' : 'flex'} flex-wrap ${className ?? ''}`}>
+      {words.map((word, wIdx) => (
+        <span key={wIdx} className="inline-flex overflow-hidden pb-[0.1em]">
+          {word.split('').map((ch, cIdx) => (
+            <span
+              key={cIdx}
+              data-hero-letter
+              // REMOVED Tailwind transforms/opacity here so it doesn't fight GSAP
+              className="inline-block will-change-transform"
+            >
+              {ch}
+            </span>
+          ))}
+          {wIdx < words.length - 1 && (
+            <span className="inline-block w-[0.25em]">&nbsp;</span>
+          )}
+        </span>
+      ))}
+    </Tag>
+  );
+}
+
+function MarqueeWord({ text }: { text: string }) {
+  return (
+    <span
+      className="font-sans font-black uppercase leading-none text-[#D9CC8C] px-8 lg:px-12"
+      style={{
+        fontSize: 'clamp(2.4rem, 5vw, 4.5rem)',
+        letterSpacing: '-0.02em',
+        fontStretch: '125%',
+        fontVariationSettings: "'wght' 900",
+      }}
+    >
+      {text}
+    </span>
+  );
+}
+
+function MarqueeDot() {
+  return (
+    <span
+      aria-hidden
+      className="inline-block h-3 w-3 lg:h-4 lg:w-4 shrink-0"
+      style={{ backgroundColor: '#FFE1D0' }}
+    />
+  );
+}
+
+function MarqueeTag({ text, icon }: { text: string; icon?: boolean }) {
+  return (
+    <span
+      className="font-display italic font-light leading-none px-7 lg:px-10 inline-flex items-center gap-3"
+      style={{
+        color: '#FFE1D0',
+        fontSize: 'clamp(1rem, 1.4vw, 1.35rem)',
+        letterSpacing: '-0.005em',
+      }}
+    >
+      {icon && (
+        <span
+          aria-hidden
+          className="inline-block h-2 w-2 rotate-45 shrink-0"
+          style={{ backgroundColor: '#D9CC8C' }}
+        />
+      )}
+      {text}
+    </span>
+  );
+}
+
+function MarqueeDiamond() {
+  return (
+    <span
+      aria-hidden
+      className="inline-block h-2.5 w-2.5 lg:h-3 lg:w-3 rotate-45 shrink-0"
+      style={{ backgroundColor: '#D9CC8C' }}
+    />
+  );
+}
+
+function CoverFrame({
+  book,
+  index,
+  srcOverride,
+}: {
+  book: BookSummary | null;
+  index: number;
+  srcOverride?: string | StaticImageData;
+}) {
+  const src: string | StaticImageData =
+    srcOverride ?? (book ? imageProxy(book.cover_r2_key) : '');
+  return (
+    <div className="group relative h-full w-full">
+      {src ? (
+        <Image
+          src={src}
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 60vw, 80vw"
+          className="object-cover drop-shadow-[0_40px_80px_rgba(0,0,0,0.85)]"
+          priority={index < 2}
+        />
+      ) : (
+        <div
+          className="flex h-full w-full items-center justify-center"
+          style={{
+            background: 'linear-gradient(135deg, #222 0%, #111 50%, #222 100%)',
+          }}
+        >
+          <span className="font-display text-[3.5rem] text-white/30" aria-hidden>▲</span>
+        </div>
+      )}
+
+      {book ? (
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-4 p-6 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100"
+          aria-hidden
+        >
+          <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-white/70 mb-1.5">
+            {book.series_name}
+          </p>
+          <p className="font-display text-[1.1rem] leading-tight text-white">{book.title}</p>
+        </div>
+      ) : null}
+    </div>
+  );
+}
