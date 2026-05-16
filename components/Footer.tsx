@@ -1,23 +1,21 @@
 import Link from 'next/link';
 import { AuthorityFooter } from './AuthorityFooter';
 
-// Apex Flow Labs ecosystem — every brand under the parent, surfaced in the
-// footer so every page hands off to the rest of the empire. External links
-// open in a new tab; current site (Books) routes internally.
+// Apex Flow Labs ecosystem — canonical 12-brand list with subdomain URLs.
+// Every brand lives at {brand}.apexflowlabs.com. Books is the current site.
 const ECOSYSTEM_BRANDS: Array<{ label: string; href: string; external?: boolean; current?: boolean }> = [
-  { label: 'Apex Flow Labs',   href: 'https://apexflowlabs.com',                            external: true },
-  { label: 'Apex Books',       href: '/',                                                   current: true },
-  { label: 'Apex Academy',     href: 'https://www.apexflowlabs.com/academy',                external: true },
-  { label: 'Apex Digital',     href: 'https://www.apexflowlabs.com/digital',                external: true },
-  { label: 'Apex Health',      href: 'https://www.apexflowlabs.com/health',                 external: true },
-  { label: 'Apex Beauty',      href: 'https://www.apexflowlabs.com/beauty',                 external: true },
-  { label: 'Apex Pets',        href: 'https://www.apexflowlabs.com/shop/art/dogs',          external: true },
-  { label: 'Apex Apparel',     href: 'https://www.apexflowlabs.com/gear',                   external: true },
-  { label: 'Apex Affiliates',  href: 'https://www.apexflowlabs.com/affiliates',             external: true },
-  { label: 'Apex Companion AI', href: 'https://www.apexflowlabs.com/companion-ai',          external: true },
-  { label: 'Apex Warfare AI',  href: 'https://www.apexflowlabs.com/warfare-ai',             external: true },
-  { label: 'Apex Kids',        href: 'https://www.apexflowlabs.com/kids',                   external: true },
-  { label: 'Spiker',           href: 'https://spikercarpetandtilecare.com',                 external: true },
+  { label: 'Apex Flow Labs',    href: 'https://www.apexflowlabs.com',          external: true },
+  { label: 'Apex Books',        href: 'https://books.apexflowlabs.com',        external: true, current: true },
+  { label: 'Apex Academy',      href: 'https://academy.apexflowlabs.com',      external: true },
+  { label: 'Apex Health',       href: 'https://health.apexflowlabs.com',       external: true },
+  { label: 'Apex Beauty',       href: 'https://beauty.apexflowlabs.com',       external: true },
+  { label: 'Apex Pets',         href: 'https://pets.apexflowlabs.com',         external: true },
+  { label: 'Apex Apparel',      href: 'https://gear.apexflowlabs.com',         external: true },
+  { label: 'Apex Affiliates',   href: 'https://partners.apexflowlabs.com',     external: true },
+  { label: 'Apex Companion AI', href: 'https://www.apexcompanion.ai/',         external: true },
+  { label: 'Apex Warfare AI',   href: 'https://warfare.apexflowlabs.com',      external: true },
+  { label: 'Apex Kids',         href: 'https://kids.apexflowlabs.com',         external: true },
+  { label: 'Spiker',            href: 'https://spiker.apexflowlabs.com',       external: true },
 ];
 
 const FOOTER_COLUMNS = [
@@ -135,37 +133,47 @@ export function Footer() {
           The Apex Flow Labs companies:
         </p>
         <ul className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3 text-[0.85rem]">
-          {ECOSYSTEM_BRANDS.map((brand, i) => (
-            <li key={brand.label} className="flex items-center gap-3">
-              {brand.external ? (
-                <a
-                  href={brand.href}
-                  target="_blank"
-                  rel="noopener noreferrer me"
-                  className={`transition-colors hover:text-accent ${
-                    brand.current ? 'text-accent' : 'text-ink-dim'
-                  }`}
-                >
-                  {brand.label}
-                </a>
-              ) : (
-                <Link
-                  href={brand.href}
-                  className={`transition-colors hover:text-accent ${
-                    brand.current ? 'text-accent' : 'text-ink-dim'
-                  }`}
-                  aria-current={brand.current ? 'page' : undefined}
-                >
-                  {brand.label}
-                  {brand.current ? <span className="ml-1 text-accent/60">·</span> : null}
-                  {brand.current ? <span className="text-accent/60 text-[10px] uppercase tracking-[0.3em]">you are here</span> : null}
-                </Link>
-              )}
-              {i < ECOSYSTEM_BRANDS.length - 1 ? (
-                <span aria-hidden className="h-1 w-1 rotate-45 bg-accent/30" />
-              ) : null}
-            </li>
-          ))}
+          {ECOSYSTEM_BRANDS.map((brand, i) => {
+            const labelEl = (
+              <>
+                {brand.label}
+                {brand.current ? (
+                  <span className="ml-2 font-mono text-[9px] uppercase tracking-[0.3em] text-accent/60">
+                    · you are here
+                  </span>
+                ) : null}
+              </>
+            );
+            const classes = `transition-colors hover:text-accent ${
+              brand.current ? 'text-accent' : 'text-ink-dim'
+            }`;
+            return (
+              <li key={brand.label} className="flex items-center gap-3">
+                {brand.external ? (
+                  <a
+                    href={brand.href}
+                    target="_blank"
+                    rel="noopener noreferrer me"
+                    className={classes}
+                    aria-current={brand.current ? 'page' : undefined}
+                  >
+                    {labelEl}
+                  </a>
+                ) : (
+                  <Link
+                    href={brand.href}
+                    className={classes}
+                    aria-current={brand.current ? 'page' : undefined}
+                  >
+                    {labelEl}
+                  </Link>
+                )}
+                {i < ECOSYSTEM_BRANDS.length - 1 ? (
+                  <span aria-hidden className="h-1 w-1 rotate-45 bg-accent/30" />
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
       </div>
 

@@ -1,275 +1,216 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import BorderGlow from './BorderGlow';
 
-// "Across the ecosystem" — eleven sister Apex Flow Labs storefronts plus
-// Spiker Carpet and Tile Care (the operating company that funded the whole thing).
-// Patterned on apex-flow-labs `components/home/TileGridShowcase.tsx`
-// (the 9-system tile-cylinder) — flattened into a static grid with
-// hover-tilt + tinted color washes for a cinematic-but-quiet feel.
-
-type Company = {
-  num: string;
-  label: string;
-  tagline: string;
-  blurb: string;
-  href: string;
-  accent: string;
-  accentSoft: string;
-  external?: boolean;
-  category?: string;
-};
-
-const COMPANIES: Company[] = [
+// "Across the ecosystem" — 12 sister brand cards using the digital store's
+// BorderGlow treatment (per-brand glow + mesh-gradient fill) so every sub-
+// domain's cross-brand carousel looks identical. Subdomain URL pattern:
+// {brand}.apexflowlabs.com.
+const BRANDS = [
   {
-    num: '01',
-    label: 'Apex Publishing',
-    tagline: 'You are here.',
-    blurb: '636 books across 12 series. The flagship of the ecosystem and the longest-lived asset.',
-    href: '/',
-    accent: '#D9CC8C',
-    accentSoft: 'rgba(217,204,140,0.18)',
-    category: 'Books',
+    brand: 'Apex Flow Labs',
+    href: 'https://www.apexflowlabs.com',
+    blurb:
+      'The ultimate ecosystem for human elevation. We architect the tools, systems, and environments required to become the absolute best version of yourself.',
+    pitch: 'Meet the labs →',
+    accent: '#C9A560',
+    glow: '45 100 65',
+    colors: ['#C9A560', '#E8DBBF', '#F3E5C8'],
   },
   {
-    num: '02',
-    label: 'Apex Academy',
-    tagline: 'Learn it. Ship it.',
-    blurb: 'Thousands of focused courses. Information into capability, with assignments operators actually run.',
-    href: 'https://www.apexflowlabs.com/academy',
-    accent: '#D9CC8C',
-    accentSoft: 'rgba(217,204,140,0.16)',
-    external: true,
-    category: 'Courses',
+    brand: 'Apex Books',
+    href: 'https://books.apexflowlabs.com',
+    blurb:
+      "The definitive library for the self-evolved. 100% pure self-help tactical guides written by people who've actually done the thing.",
+    pitch: 'Read first chapter free →',
+    accent: '#A78BFA',
+    glow: '214 100 60',
+    colors: ['#A78BFA', '#C4B5FD', '#DDD6FE'],
   },
   {
-    num: '03',
-    label: 'Companion AI',
-    tagline: 'Talk to the system.',
-    blurb: 'Streaming AI assistant trained on every Apex book + course. Multi-persona, memory-aware.',
-    href: 'https://www.apexflowlabs.com/companion-ai',
-    accent: '#D9CC8C',
-    accentSoft: 'rgba(217,204,140,0.14)',
-    external: true,
-    category: 'AI',
+    brand: 'Apex Academy',
+    href: 'https://academy.apexflowlabs.com',
+    blurb:
+      'Most courses are 60 hours of fluff to feel valuable. Ours are 8 hours of what actually works. Pay less, finish more, win sooner.',
+    pitch: 'See the cohort →',
+    accent: '#22C55E',
+    glow: '142 100 75',
+    colors: ['#22C55E', '#4ADE80', '#86EFAC'],
   },
   {
-    num: '04',
-    label: 'Warfare AI',
-    tagline: 'Control your numbers.',
-    blurb: 'Financial + business command system for operators. The boring kind of dashboard that actually changes behavior.',
-    href: 'https://www.apexflowlabs.com/warfare-ai',
-    accent: '#D9CC8C',
-    accentSoft: 'rgba(217,204,140,0.12)',
-    external: true,
-    category: 'AI',
+    brand: 'Apex Health',
+    href: 'https://health.apexflowlabs.com',
+    blurb:
+      'Most supplements are colored sugar with a marketing budget. Ours have third-party labs and a refund policy. Read the panel. Then decide.',
+    pitch: 'Optimize your health →',
+    accent: '#EF4444',
+    glow: '0 100 65',
+    colors: ['#EF4444', '#F87171', '#FCA5A5'],
   },
   {
-    num: '05',
-    label: 'Digital Art',
-    tagline: 'Print-ready, instant.',
-    blurb: '300-DPI digital wall art, posters, sticker sheets, wallpapers. New drops weekly.',
-    href: 'https://www.apexflowlabs.com/digital-art',
-    accent: '#D9CC8C',
-    accentSoft: 'rgba(217,204,140,0.16)',
-    external: true,
-    category: 'Shop',
+    brand: 'Apex Beauty',
+    href: 'https://beauty.apexflowlabs.com',
+    blurb:
+      'Skincare without the seventeen-step ritual. Built on actives that have actually been studied. The rest is theater.',
+    pitch: 'See the actives →',
+    accent: '#F472B6',
+    glow: '330 100 75',
+    colors: ['#F472B6', '#F9A8D4', '#FBCFE8'],
   },
   {
-    num: '06',
-    label: 'Beauty',
-    tagline: 'Six categories of authority.',
-    blurb: 'Skincare cluster spine. Ninety pillar clusters, every product anchored in ingredient science.',
-    href: 'https://www.apexflowlabs.com/beauty',
-    accent: '#D9CC8C',
-    accentSoft: 'rgba(217,204,140,0.14)',
-    external: true,
-    category: 'Shop',
+    brand: 'Apex Pets',
+    href: 'https://pets.apexflowlabs.com',
+    blurb:
+      "Your dog doesn't need a $90 'wellness blend.' He needs the thing that works. We sell that.",
+    pitch: 'Shop for them →',
+    accent: '#D4A574',
+    glow: '30 100 65',
+    colors: ['#D4A574', '#E5C4A1', '#F1E2CE'],
   },
   {
-    num: '07',
-    label: 'Health',
-    tagline: 'Engineered fuel.',
-    blurb: 'Sleep, supplements, recovery — research-anchored. The protocol your operator-self actually needs.',
-    href: 'https://www.apexflowlabs.com/health',
-    accent: '#D9CC8C',
-    accentSoft: 'rgba(217,204,140,0.14)',
-    external: true,
-    category: 'Shop',
+    brand: 'Apex Apparel',
+    href: 'https://gear.apexflowlabs.com',
+    blurb:
+      "Hoodies built like armor. T-shirts that don't shrink. Worn by people who do things, not people who post about doing things.",
+    pitch: 'Gear up →',
+    accent: '#F5F5F5',
+    glow: '0 0 98',
+    colors: ['#F5F5F5', '#E5E5E5', '#D4D4D4'],
   },
   {
-    num: '08',
-    label: 'Pets',
-    tagline: '600+ families.',
-    blurb: 'AI-rendered art for the dogs you love. Every breed × every style × every theme.',
-    href: 'https://www.apexflowlabs.com/shop/art/dogs',
-    accent: '#D9CC8C',
-    accentSoft: 'rgba(217,204,140,0.14)',
-    external: true,
-    category: 'Shop',
+    brand: 'Apex Affiliates',
+    href: 'https://partners.apexflowlabs.com',
+    blurb:
+      'The most high-level affiliate program on the market. Highest paying commissions for those elite enough to promote the best in the world.',
+    pitch: 'Join the army →',
+    accent: '#F59E0B',
+    glow: '45 100 55',
+    colors: ['#F59E0B', '#FBBF24', '#FCD34D'],
   },
   {
-    num: '09',
-    label: 'Apex Gear',
-    tagline: 'Never accidental.',
-    blurb: 'Apparel, accessories, daily-carry. One design becomes fifty-six SKUs via the asset multiplier.',
-    href: 'https://www.apexflowlabs.com/gear',
-    accent: '#D9CC8C',
-    accentSoft: 'rgba(217,204,140,0.16)',
-    external: true,
-    category: 'Apparel',
+    brand: 'Apex Companion AI',
+    href: 'https://www.apexcompanion.ai/',
+    blurb:
+      'Your digital best friend to help you get through life. Plans your week, books your dinner, and works out every problem you have.',
+    pitch: 'Talk to Companion →',
+    accent: '#06B6D4',
+    glow: '190 100 60',
+    colors: ['#06B6D4', '#22D3EE', '#67E8F9'],
   },
   {
-    num: '10',
-    label: 'Tools',
-    tagline: 'Routes to revenue.',
-    blurb: 'Calculators, generators, planners. Free. Every tool sends a visitor into a product or guide.',
-    href: 'https://www.apexflowlabs.com/tools',
-    accent: '#D9CC8C',
-    accentSoft: 'rgba(217,204,140,0.14)',
-    external: true,
-    category: 'Free',
+    brand: 'Apex Warfare AI',
+    href: 'https://warfare.apexflowlabs.com',
+    blurb:
+      '100% business accountability and tactical intelligence. Know your numbers, kill your excuses, and level up at all times.',
+    pitch: 'Enter the bunker →',
+    accent: '#DC2626',
+    glow: '0 100 50',
+    colors: ['#DC2626', '#B91C1C', '#991B1B'],
   },
   {
-    num: '11',
-    label: 'Apex Digital',
-    tagline: 'The vault.',
-    blurb: 'Notion templates, system blueprints, operator-grade downloads. The digital store — refreshed weekly inside the vault.',
-    href: 'https://www.apexflowlabs.com/digital',
-    accent: '#D9CC8C',
-    accentSoft: 'rgba(217,204,140,0.16)',
-    external: true,
-    category: 'Digital',
+    brand: 'Apex Kids',
+    href: 'https://kids.apexflowlabs.com',
+    blurb:
+      'Building the next generation of titans. Logic, systems, and AI literacy for the leaders who will inherit the future.',
+    pitch: 'Future-proof them →',
+    accent: '#FDE047',
+    glow: '55 100 70',
+    colors: ['#FDE047', '#FEF08A', '#FEF9C3'],
   },
   {
-    num: '12',
-    label: 'Spiker Carpet and Tile Care',
-    tagline: 'The original.',
-    blurb: "Brian's rug-cleaning company since 2013. The 13 years of operations that back-test every Apex book.",
-    href: 'https://spikercarpetandtilecare.com',
-    accent: '#D9CC8C',
-    accentSoft: 'rgba(217,204,140,0.18)',
-    external: true,
-    category: 'Operations',
+    brand: 'Spiker',
+    href: 'https://spiker.apexflowlabs.com',
+    blurb:
+      'The Spiker Standard for service businesses — cleaning, contracting, lawn, pool, handyman. Operator-grade SOPs and pricing built for crews that actually run jobs.',
+    pitch: 'Build to the standard →',
+    accent: '#FF6B35',
+    glow: '16 100 60',
+    colors: ['#FF6B35', '#FF8C5C', '#FFA882'],
   },
 ];
 
 export function AcrossEcosystem() {
-  const reduced = useReducedMotion();
-
   return (
-    <section className="relative z-10 overflow-hidden px-6 py-32 md:py-40">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(50% 80% at 0% 0%, rgba(217,204,140,0.10) 0%, transparent 60%), radial-gradient(50% 80% at 100% 100%, rgba(217,204,140,0.06) 0%, transparent 60%)',
-        }}
-      />
-
+    <section className="relative z-10 overflow-hidden px-6 py-20 sm:py-28 lg:py-32">
       <div className="relative z-10 mx-auto max-w-7xl">
-        <motion.div
-          initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-16 flex flex-wrap items-end justify-between gap-6"
-        >
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.42em] text-accent">
+        <div className="mb-12 grid gap-10 md:grid-cols-12 md:items-end">
+          <div className="md:col-span-7">
+            <div
+              className="font-mono text-[11px] uppercase inline-flex items-center gap-2 text-accent"
+              style={{ letterSpacing: '0.14em' }}
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-current" />
               Across the ecosystem
-            </p>
-            <h2 className="mt-4 max-w-3xl font-display text-4xl text-ink md:text-6xl">
-              Eleven more Apex Flow Labs companies.{' '}
-              <span className="metallic-text">Plus Spiker.</span>
-            </h2>
-            <p className="mt-4 max-w-xl text-base text-ink-dim md:text-lg">
-              Books is one of twelve doors into the same ecosystem. Each one is its own
-              storefront — same operator, same voice, different battlefield. And underneath all
-              of it: Brian's rug company, the operation that back-tests every page.
-            </p>
-          </div>
-          <span className="rounded-full border border-line bg-bg/40 px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-ink-dim backdrop-blur-md">
-            12 / 12 · One operator
-          </span>
-        </motion.div>
-
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {COMPANIES.map((c, i) => (
-            <motion.a
-              key={c.num}
-              href={c.href}
-              target={c.external ? '_blank' : undefined}
-              rel={c.external ? 'noopener noreferrer' : undefined}
-              data-cursor-label={c.external ? 'Visit →' : 'You are here'}
-              initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{
-                duration: 0.7,
-                delay: reduced ? 0 : i * 0.04,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              whileHover={reduced ? undefined : { y: -6 }}
-              className="group relative flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/40 p-6 backdrop-blur-md transition-colors duration-500 hover:border-white/30"
+            </div>
+            <h2
+              className="mt-5 text-white font-display"
               style={{
-                ['--accent' as string]: c.accent,
-                ['--accent-soft' as string]: c.accentSoft,
+                fontSize: 'clamp(36px, 5.2vw, 80px)',
+                lineHeight: 0.95,
+                letterSpacing: '-0.035em',
               }}
             >
-              {/* Color wash */}
-              <span
-                aria-hidden
-                className="pointer-events-none absolute inset-0 opacity-30 transition-opacity duration-700 group-hover:opacity-70"
-                style={{
-                  background: `radial-gradient(60% 70% at 30% 0%, var(--accent-soft) 0%, transparent 70%)`,
-                }}
-              />
-              {/* Diagonal shimmer on hover */}
-              <span
-                aria-hidden
-                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-1000 group-hover:translate-x-full"
-              />
+              Eleven more{' '}
+              <span className="italic text-accent">Apex Flow Labs</span> companies — plus Spiker.
+            </h2>
+          </div>
+          <p className="md:col-span-5 max-w-[44ch] text-[17px] leading-[1.55] text-white">
+            When you join the Apex Books Insider Pass, you get a 20% discount across every sister
+            brand. One customer, twelve doors.
+          </p>
+        </div>
 
-              <div className="relative z-10 flex items-start justify-between">
-                <span
-                  className="font-display text-5xl font-light leading-none"
-                  style={{ color: c.accent, fontVariantNumeric: 'tabular-nums' }}
-                >
-                  {c.num}
-                </span>
-                {c.category ? (
-                  <span
-                    className="rounded-full border px-3 py-1 text-[10px] uppercase tracking-[0.24em]"
-                    style={{
-                      borderColor: c.accent,
-                      color: c.accent,
-                    }}
-                  >
-                    {c.category}
-                  </span>
-                ) : null}
-              </div>
-
-              <div className="relative z-10 mt-8">
-                <h3 className="font-display text-2xl text-ink">{c.label}</h3>
-                <p className="mt-2 italic text-ink-dim">{c.tagline}</p>
-              </div>
-
-              <p className="relative z-10 mt-5 flex-1 text-sm leading-relaxed text-ink-dim">
-                {c.blurb}
-              </p>
-
-              <div className="relative z-10 mt-6 flex items-center gap-2 text-[11px] uppercase tracking-[0.28em] text-ink-dim transition-colors group-hover:text-accent">
-                <span>{c.external ? 'Visit' : 'You are here'}</span>
-                <ArrowUpRight
-                  className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  aria-hidden
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {BRANDS.map((b) => (
+            <BorderGlow
+              key={b.brand}
+              glowColor={b.glow}
+              colors={b.colors}
+              borderRadius={32}
+              backgroundColor="#0F0F12"
+              fillOpacity={0.4}
+              className="group"
+            >
+              <a
+                href={b.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-interactive
+                className="relative block p-8 transition-all duration-500 hover:-translate-y-0.5 h-full flex flex-col"
+                style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
+              >
+                <div
+                  className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle at top right, ${b.accent}15, transparent 60%)`,
+                  }}
                 />
-              </div>
-            </motion.a>
+                <div
+                  className="relative font-mono text-[11px] uppercase mb-3 font-semibold"
+                  style={{
+                    color: b.accent,
+                    letterSpacing: '0.14em',
+                  }}
+                >
+                  {b.brand}
+                </div>
+                <p className="relative text-[18px] leading-[1.4] text-white flex-grow font-medium">
+                  {b.blurb}
+                </p>
+                <div
+                  className="relative mt-8 flex items-center justify-between border-t border-white/10 pt-5 font-mono text-[11px] uppercase"
+                  style={{ letterSpacing: '0.12em' }}
+                >
+                  <span className="text-white">20% off</span>
+                  <span
+                    className="transition-transform group-hover:translate-x-0.5 font-bold"
+                    style={{ color: b.accent }}
+                  >
+                    {b.pitch}
+                  </span>
+                </div>
+              </a>
+            </BorderGlow>
           ))}
         </div>
       </div>
