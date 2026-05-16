@@ -15,8 +15,14 @@ export function TrustBar() {
         }}
       />
 
-      <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center gap-6 text-center">
-        <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-accent/80">
+      <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center gap-8 text-center">
+        <p
+          className="font-mono uppercase font-medium text-accent/85"
+          style={{
+            fontSize: 'clamp(0.9rem, 1.6vw, 1.6rem)',
+            letterSpacing: '0.4em',
+          }}
+        >
           The work got noticed
         </p>
 
@@ -37,8 +43,8 @@ export function TrustBar() {
         </div>
 
         <p
-          className="max-w-xl font-display italic font-extralight leading-[1.5] text-ink-dim"
-          style={{ fontSize: 'clamp(0.95rem, 1.2vw, 1.15rem)' }}
+          className="max-w-3xl font-display italic font-extralight leading-[1.4] text-cream"
+          style={{ fontSize: 'clamp(1.8rem, 3.6vw, 3.45rem)' }}
         >
           The carpet business kept getting picked up by local press. Eventually the books
           did too. We didn&apos;t pay for any of it.

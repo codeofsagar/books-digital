@@ -133,10 +133,10 @@ const COMPANIES: Company[] = [
   },
   {
     num: '11',
-    label: 'Templates',
+    label: 'Apex Digital',
     tagline: 'The vault.',
-    blurb: 'Notion templates, system blueprints, operator-grade downloads. Refreshed weekly inside the vault.',
-    href: 'https://www.apexflowlabs.com/templates',
+    blurb: 'Notion templates, system blueprints, operator-grade downloads. The digital store — refreshed weekly inside the vault.',
+    href: 'https://www.apexflowlabs.com/digital',
     accent: '#D9CC8C',
     accentSoft: 'rgba(217,204,140,0.16)',
     external: true,

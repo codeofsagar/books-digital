@@ -41,11 +41,11 @@ export function WholePitch() {
           §05 · The whole pitch
         </p>
 
-        <ul className="mt-14 space-y-5">
+        <ul className="mt-14 space-y-7">
           {LINES.map((line, i) => (
             <motion.li
               key={`${line.value}-${line.label}`}
-              className="flex items-baseline justify-center gap-4"
+              className="flex flex-wrap items-baseline justify-center gap-x-5 gap-y-1"
               initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
@@ -57,13 +57,13 @@ export function WholePitch() {
             >
               <span
                 className="metallic-text font-display font-light leading-none tracking-tight"
-                style={{ fontSize: 'clamp(2rem, 4vw, 4rem)' }}
+                style={{ fontSize: 'clamp(3.6rem, 7.5vw, 7.5rem)' }}
               >
                 {line.value}
               </span>
               <span
                 className="metallic-text font-display font-light italic leading-none tracking-tight"
-                style={{ fontSize: 'clamp(1.4rem, 2.4vw, 2.4rem)' }}
+                style={{ fontSize: 'clamp(2.4rem, 4.5vw, 4.5rem)' }}
               >
                 {line.label}
               </span>
@@ -72,8 +72,8 @@ export function WholePitch() {
         </ul>
 
         <motion.p
-          className="metallic-text mt-10 font-display font-light italic"
-          style={{ fontSize: 'clamp(1.1rem, 1.5vw, 1.5rem)' }}
+          className="metallic-text mt-12 font-display font-light italic"
+          style={{ fontSize: 'clamp(1.9rem, 3vw, 3rem)' }}
           initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
