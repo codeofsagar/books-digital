@@ -10,6 +10,7 @@ import { LeadCapture } from '@/components/LeadCapture';
 import { FoundationSection } from '@/components/FoundationSection';
 import { FeaturedShowcase } from '@/components/FeaturedShowcase';
 import { SeriesRosterMarquee } from '@/components/SeriesRosterMarquee';
+import { TrustBar } from '@/components/TrustBar';
 import { AnimatedReviewsRail } from '@/components/AnimatedReviewsRail';
 import { WholePitch } from '@/components/WholePitch';
 import { FounderNote } from '@/components/FounderNote';
@@ -103,6 +104,9 @@ export default async function HomePage() {
       <JsonLdSchema bundle={seo} fallback={fallbackPageSchema('/', 'Apex Book Publishing')} />
 
       <HomeHero books={heroCovers} totalBooks={totalBooks} />
+
+      {/* Press credibility strip — first trust signal under the hero */}
+      <TrustBar />
 
       {/* The Foundation — cinematic chrome-text section */}
       <FoundationSection />
