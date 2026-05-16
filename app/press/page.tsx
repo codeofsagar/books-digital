@@ -6,9 +6,9 @@ import { getPageSeo } from '@/lib/api';
 import { buildMetadata, fallbackPageSchema } from '@/lib/seo';
 
 export const metadata = buildMetadata({
-  title: 'Press — Apex Raw Motivation',
+  title: 'Press — Apex Book Publishing',
   description:
-    'Press kit for Apex Raw Motivation. Boilerplate, bio, high-res assets, and the answer to "is the rug-cleaning thing real?" — yes.',
+    'Press kit for Apex Book Publishing. Boilerplate, bio, high-res assets, and the answer to "is the rug-cleaning thing real?" — yes.',
   path: '/press',
 });
 
@@ -81,8 +81,8 @@ export default async function PressPage() {
               Brian Spiker started Spiker Carpet and Tile Care in 2013. The business does carpet
               cleaning, upholstery cleaning, tile and grout cleaning and sealing, and pet odor
               removal — including enzyme treatment for urine and microbiological oil treatment
-              for wet-dog smells. After 13 years of running it, he started writing Apex Raw
-              Motivation, a 636-book self-help catalog across 12 series in an R-rated, savage,
+              for wet-dog smells. After 13 years of running it, he started writing Apex Book
+              Publishing, a 636-book self-help catalog across 12 series in an R-rated, savage,
               plain-spoken voice. He&apos;s the founder of Apex Flow Labs, a 12-brand ecosystem
               spanning books, podcasts, courses, digital products, apparel, AI tools, and
               consumer brands.

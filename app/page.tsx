@@ -9,6 +9,7 @@ import { Magnetic } from '@/components/Magnetic';
 import { LeadCapture } from '@/components/LeadCapture';
 import { FoundationSection } from '@/components/FoundationSection';
 import { FeaturedShowcase } from '@/components/FeaturedShowcase';
+import { SeriesRosterMarquee } from '@/components/SeriesRosterMarquee';
 import { AnimatedReviewsRail } from '@/components/AnimatedReviewsRail';
 import { WholePitch } from '@/components/WholePitch';
 import { FounderNote } from '@/components/FounderNote';
@@ -21,7 +22,7 @@ import { empty } from '@/lib/voice';
 import type { Wave } from '@/lib/types';
 
 export const metadata = buildMetadata({
-  title: 'Apex Raw Motivation — 636 books. 12 series. One war manual library.',
+  title: 'Apex Book Publishing — 636 books. 12 series. One war manual library.',
   description:
     '636 books. 12 series. Operator-grade self-help built on 13 years of operations at Spiker Carpet and Tile Care.',
   path: '/',
@@ -99,7 +100,7 @@ export default async function HomePage() {
 
   return (
     <PageShell>
-      <JsonLdSchema bundle={seo} fallback={fallbackPageSchema('/', 'Apex Raw Motivation')} />
+      <JsonLdSchema bundle={seo} fallback={fallbackPageSchema('/', 'Apex Book Publishing')} />
 
       <HomeHero books={heroCovers} totalBooks={totalBooks} />
 
@@ -166,50 +167,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* All 12 series detailed grid — when backend ships data */}
-      {allSeries.length > 0 && (
-        <section className="relative z-10 border-t border-white/5 bg-gradient-to-b from-transparent to-[#0a0a07]/60 px-6 py-12 sm:py-28 lg:py-32">
-          <div className="mx-auto w-full max-w-7xl">
-            <Reveal className="max-w-2xl">
-              <p className="text-[10px] uppercase tracking-[0.36em] text-accent">The full roster</p>
-              <h2 className="mt-3 font-display text-4xl text-ink sm:text-5xl">
-                All twelve, named.
-              </h2>
-            </Reveal>
-
-            <RevealStagger className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" amount={0.05}>
-              {allSeries.map((s) => (
-                <RevealItem key={s.slug}>
-                  <Link
-                    href={`/series/${s.slug}`}
-                    className="group relative block overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/30 p-6 backdrop-blur-md transition hover:-translate-y-0.5 hover:border-accent/60"
-                    style={{ ['--series-color' as string]: s.color_hex }}
-                    data-cursor-label="Enter"
-                  >
-                    <div
-                      aria-hidden
-                      className="absolute inset-0 -z-0 opacity-20 transition-opacity duration-700 group-hover:opacity-50"
-                      style={{
-                        background: `radial-gradient(circle at 30% 0%, ${s.color_hex} 0%, transparent 70%)`,
-                      }}
-                    />
-                    <div className="relative z-10">
-                      <p className="text-[10px] uppercase tracking-[0.28em] text-series">
-                        {waveLabel(s.wave)}
-                      </p>
-                      <h3 className="mt-3 font-display text-xl text-ink">{s.name}</h3>
-                      <p className="mt-2 text-xs text-ink-mute">
-                        {s.book_count} books · {intensityGlyphs(s.intensity)}
-                      </p>
-                      <p className="mt-3 text-[11px] text-ink-dim">e.g. {s.sample_title}</p>
-                    </div>
-                  </Link>
-                </RevealItem>
-              ))}
-            </RevealStagger>
-          </div>
-        </section>
-      )}
+      {/* All 12 series — animated marquee using the locked b1–b12 covers */}
+      <SeriesRosterMarquee />
 
       {/* Authority — real-world proof, gradient bg */}
       <section className="relative z-10 overflow-hidden border-t border-white/5 px-6 py-12 sm:py-28 lg:py-36">

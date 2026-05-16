@@ -74,7 +74,7 @@ The backend Claude session needs to ship these before this frontend can hit them
 | `GET /api/v1/series/<slug>` | One series + 53 book list ordered by book number | TODO backend |
 | `GET /api/v1/podcast/feed?limit=` | Episode list w/ duration (8-12 min episodes), audio URL, transcript URL, related book slug | TODO backend |
 | `GET /api/v1/podcast/<slug>` | Single episode + related book + transcript + 9 directory subscribe links | TODO backend |
-| `GET /api/v1/seo/book/<slug>` | JSON-LD bundle: `Book` + `Person`(Brian) + `Organization`(Apex Raw Motivation) + `isBasedOn`(Spiker Carpet and Tile Care) + `Review` + `FAQPage` + `AudiobookFormat` + `BreadcrumbList` — per Master §6.4 schema density | TODO backend |
+| `GET /api/v1/seo/book/<slug>` | JSON-LD bundle: `Book` + `Person`(Brian) + `Organization`(Apex Book Publishing) + `isBasedOn`(Spiker Carpet and Tile Care) + `Review` + `FAQPage` + `AudiobookFormat` + `BreadcrumbList` — per Master §6.4 schema density | TODO backend |
 | `GET /api/v1/seo/series/<slug>` | JSON-LD for series pillar page | TODO backend |
 | `GET /api/v1/seo/article/<template>/<slug>` | JSON-LD + content for cluster / best-books / 90-day-program / comparison / reading-guide pages | TODO backend (Phase 3) |
 | `POST /api/v1/lead-magnets/free-chapter` | `{email, bookSlug}` → enqueues delivery email, marks UTM, drops Klaviyo subscriber | TODO backend |

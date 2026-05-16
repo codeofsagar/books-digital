@@ -7,9 +7,9 @@ import { buildMetadata, fallbackPageSchema } from '@/lib/seo';
 import { empty } from '@/lib/voice';
 
 export const metadata = buildMetadata({
-  title: 'All books — Apex Raw Motivation',
+  title: 'All books — Apex Book Publishing',
   description:
-    'The full Apex Raw Motivation library. 636 books across 12 series. Filter by series, wave, format, or voice intensity.',
+    'The full Apex Book Publishing library. 636 books across 12 series. Filter by series, wave, format, or voice intensity.',
   path: '/books',
 });
 

@@ -62,7 +62,7 @@ export function Footer() {
           <div className="flex items-center gap-3">
             <span aria-hidden className="text-2xl text-accent">▲</span>
             <p className="font-display text-[1.45rem] italic font-light text-cream tracking-tight">
-              Apex Raw Motivation
+              Apex Book Publishing
             </p>
           </div>
           <p className="mt-5 text-sm font-light leading-[1.7] text-ink-dim max-w-xs">
@@ -116,7 +116,7 @@ export function Footer() {
 
       <div className="container-x relative flex flex-col gap-3 py-7 text-xs text-ink-mute md:flex-row md:items-center md:justify-between">
         <p className="font-mono uppercase tracking-[0.3em]">
-          © {new Date().getUTCFullYear()} Apex Raw Motivation · All rights reserved
+          © {new Date().getUTCFullYear()} Apex Book Publishing · All rights reserved
         </p>
         <p className="font-mono uppercase tracking-[0.3em]">
           Original business ·{' '}

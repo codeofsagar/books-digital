@@ -12,7 +12,7 @@ Add to the existing footer:
 ```
 ABOUT THE OWNER
 
-Brian also writes Apex Raw Motivation — 636 self-help books on
+Brian also writes Apex Book Publishing — 636 self-help books on
 discipline, comebacks, and life in general. Written between carpet
 jobs.
 
@@ -33,8 +33,8 @@ THE BOOKS
 with every smell pets can produce gives you a lot of time to think.
 And a lot of stories.
 
-A few years ago I started writing it down. Turned into Apex Raw
-Motivation — 636 books across 12 series. R-rated. Funny. About real
+A few years ago I started writing it down. Turned into Apex Book
+Publishing — 636 books across 12 series. R-rated. Funny. About real
 life.
 
 If you've ever wondered what 13 years of being on real job sites
@@ -43,7 +43,7 @@ looks like in book form — it's there.
 → books.apexflowlabs.com
 
 If you want the audio version, there's a podcast every weekday.
-→ Apex Raw Motivation
+→ Apex Book Publishing
 ```
 
 ---
@@ -120,7 +120,7 @@ Add a small sidebar/widget on Spiker's homepage and About page:
 ```
 ALSO BY BRIAN
 
-Brian also writes Apex Raw Motivation —
+Brian also writes Apex Book Publishing —
 636 R-rated self-help books.
 → books.apexflowlabs.com
 ```
@@ -202,7 +202,7 @@ This is the most important single line in the whole retrofit. Google Business Pr
 In Brian's Google Business Profile bio, add:
 
 ```
-Owner: Brian Spiker. Also author of Apex Raw Motivation — 636 books.
+Owner: Brian Spiker. Also author of Apex Book Publishing — 636 books.
 → books.apexflowlabs.com
 ```
 

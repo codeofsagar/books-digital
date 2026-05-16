@@ -110,7 +110,7 @@ export function AuthorByline({
           Spiker Carpet and Tile Care
         </a>
         {' '}(operating since 2013) · Author of{' '}
-        <span className="text-cream">Apex Raw Motivation</span>{' '}
+        <span className="text-cream">Apex Book Publishing</span>{' '}
         (636 books) · Founder,{' '}
         <a
           href="https://apexflowlabs.com"

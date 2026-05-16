@@ -9,7 +9,7 @@ import { formatDurationFromSeconds } from '@/lib/utils';
 import { empty } from '@/lib/voice';
 
 export const metadata = buildMetadata({
-  title: 'Podcast — Apex Raw Motivation',
+  title: 'Podcast — Apex Book Publishing',
   description:
     '8-12 minute episodes. Brian walks through one book chapter at a time. Subscribe on Apple, Spotify, Amazon, YouTube Music, iHeart, Pandora, Stitcher, Pocket Casts, or Overcast.',
   path: '/podcast',
@@ -36,7 +36,7 @@ export default async function PodcastPage() {
 
   return (
     <PageShell>
-      <JsonLdSchema bundle={seo} fallback={fallbackPageSchema('/podcast', 'Apex Raw Motivation Podcast')} />
+      <JsonLdSchema bundle={seo} fallback={fallbackPageSchema('/podcast', 'Apex Book Publishing Podcast')} />
 
       <Hero
         eyebrow="Podcast"
