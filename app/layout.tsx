@@ -58,8 +58,13 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geist.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}>
-      <body>
+    <html lang="en" className={`${geist.variable} ${fraunces.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+      {/* suppressHydrationWarning on <body> swallows the mismatch from
+          browser extensions (ColorZilla `cz-shortcut-listen`, Grammarly
+          `data-gr-*`, Honey, etc.) that inject attributes before React
+          hydrates. Scoped to this element only — the rest of the tree
+          still gets full hydration checking. */}
+      <body suppressHydrationWarning>
         <BackgroundLoader />
         {/* Site-wide backdrop blur — sits above the shader background
             (z: -10) and below all page content (z: 2). Every route picks

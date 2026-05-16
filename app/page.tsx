@@ -108,7 +108,7 @@ export default async function HomePage() {
 
       {/* Featured — animated parallax showcase */}
       {featured.length === 0 ? (
-        <section id="featured" className="relative z-10 px-6 py-28 sm:py-32">
+        <section id="featured" className="relative z-10 px-6 py-12 sm:py-28 lg:py-32">
           <div className="mx-auto w-full max-w-7xl">
             <Reveal>
               <p className="text-[10px] uppercase tracking-[0.36em] text-accent">Featured</p>
@@ -126,7 +126,7 @@ export default async function HomePage() {
       )}
 
       {/* The 12 series — 4 wave tiles, digital-art categories style */}
-      <section className="relative z-10 border-t border-white/5 px-6 py-28 sm:py-32">
+      <section className="relative z-10 border-t border-white/5 px-6 py-12 sm:py-28 lg:py-32">
         <div className="mx-auto w-full max-w-7xl">
           <Reveal>
             <p className="text-[10px] uppercase tracking-[0.36em] text-accent">The 12 series</p>
@@ -168,7 +168,7 @@ export default async function HomePage() {
 
       {/* All 12 series detailed grid — when backend ships data */}
       {allSeries.length > 0 && (
-        <section className="relative z-10 border-t border-white/5 bg-gradient-to-b from-transparent to-[#0a0a07]/60 px-6 py-28 sm:py-32">
+        <section className="relative z-10 border-t border-white/5 bg-gradient-to-b from-transparent to-[#0a0a07]/60 px-6 py-12 sm:py-28 lg:py-32">
           <div className="mx-auto w-full max-w-7xl">
             <Reveal className="max-w-2xl">
               <p className="text-[10px] uppercase tracking-[0.36em] text-accent">The full roster</p>
@@ -212,7 +212,7 @@ export default async function HomePage() {
       )}
 
       {/* Authority — real-world proof, gradient bg */}
-      <section className="relative z-10 overflow-hidden border-t border-white/5 px-6 py-28 sm:py-36">
+      <section className="relative z-10 overflow-hidden border-t border-white/5 px-6 py-12 sm:py-28 lg:py-36">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
@@ -276,7 +276,7 @@ export default async function HomePage() {
       </section>
 
       {/* Lead capture banner */}
-      <section className="relative z-10 px-6 py-24">
+      <section className="relative z-10 px-6 py-10 sm:py-24">
         <div className="mx-auto w-full max-w-3xl">
           <Reveal>
             <LeadCapture
@@ -291,7 +291,7 @@ export default async function HomePage() {
       </section>
 
       {/* Membership / bundles / founder — pricing trifecta, digital-art vault style */}
-      <section className="relative z-10 border-t border-white/5 bg-gradient-to-b from-transparent via-[#1a0a07]/40 to-transparent px-6 py-28 sm:py-32">
+      <section className="relative z-10 border-t border-white/5 bg-gradient-to-b from-transparent via-[#1a0a07]/40 to-transparent px-6 py-12 sm:py-28 lg:py-32">
         <div className="mx-auto w-full max-w-7xl">
           <Reveal className="max-w-3xl">
             <p className="text-[10px] uppercase tracking-[0.36em] text-accent">Three ways in</p>
@@ -355,7 +355,7 @@ export default async function HomePage() {
       <AcrossEcosystem />
 
       {/* AI Concierge invite — like CompanionInvite */}
-      <section className="relative z-10 px-6 py-24">
+      <section className="relative z-10 px-6 py-10 sm:py-24">
         <div className="mx-auto w-full max-w-7xl">
           <Reveal
             className="relative overflow-hidden rounded-[2rem] border border-accent/30 bg-gradient-to-br from-accent/15 to-transparent p-10 backdrop-blur-md md:p-16"

@@ -92,7 +92,7 @@ export function FeaturedShowcase({ totalBooks }: FeaturedShowcaseProps) {
     <section
       id="featured"
       ref={root}
-      className="relative z-10 overflow-hidden py-28 sm:py-36"
+      className="relative z-10 overflow-hidden py-12 sm:py-28 lg:py-36"
     >
       <div
         aria-hidden
@@ -136,7 +136,7 @@ export function FeaturedShowcase({ totalBooks }: FeaturedShowcaseProps) {
         {/* FLAT 3-UP CAROUSEL */}
         <div
           data-feat-fade
-          className="carousel-stage relative mt-20 flex items-center justify-center"
+          className="carousel-stage relative mt-8 sm:mt-16 lg:mt-20 flex items-center justify-center"
         >
           {COVERS.map((c, i) => {
             const slot = slotFor(i);
@@ -217,7 +217,7 @@ export function FeaturedShowcase({ totalBooks }: FeaturedShowcaseProps) {
         </div>
 
         {/* Progress dots */}
-        <div data-feat-fade className="mt-24 flex items-center justify-center gap-2">
+        <div data-feat-fade className="mt-8 sm:mt-16 lg:mt-24 flex items-center justify-center gap-2">
           {COVERS.map((_, i) => (
             <span
               key={i}
@@ -231,7 +231,7 @@ export function FeaturedShowcase({ totalBooks }: FeaturedShowcaseProps) {
           ))}
         </div>
 
-        <div data-feat-fade className="mt-10 flex justify-center">
+        <div data-feat-fade className="mt-6 sm:mt-10 flex justify-center">
           <Link href="/books" className="cta-3d" data-cursor-label="All books">
             <span>See all {totalBooks > 0 ? totalBooks.toLocaleString() : '636'} books</span>
             <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} aria-hidden />
@@ -241,14 +241,14 @@ export function FeaturedShowcase({ totalBooks }: FeaturedShowcaseProps) {
 
       <style jsx>{`
         .carousel-stage {
-          height: clamp(520px, 78vh, 880px);
+          height: clamp(320px, 50vh, 880px);
         }
         .carousel-card {
           position: absolute;
           top: 50%;
           left: 50%;
-          width: 320px;
-          height: 480px;
+          width: 200px;
+          height: 300px;
           transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
                       opacity 0.6s ease;
           filter:
@@ -256,12 +256,18 @@ export function FeaturedShowcase({ totalBooks }: FeaturedShowcaseProps) {
             drop-shadow(0 0 60px rgba(217, 204, 140, 0.18));
         }
         @media (min-width: 640px) {
+          .carousel-stage {
+            height: clamp(440px, 64vh, 720px);
+          }
           .carousel-card {
             width: 400px;
             height: 600px;
           }
         }
         @media (min-width: 1024px) {
+          .carousel-stage {
+            height: clamp(520px, 78vh, 880px);
+          }
           .carousel-card {
             width: 500px;
             height: 750px;

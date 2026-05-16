@@ -9,43 +9,49 @@ import type { BookSummary } from '@/lib/types';
 import { imageProxy } from '@/lib/utils';
 import { Magnetic } from './Magnetic';
 
-// Static book covers shipped from /public — imported so Next.js can optimise
-// them and we get a stable bundle reference per slot (no `${i + 1}` template
-// guessing).
+// Static book covers shipped from /public — one per series (b1–b12).
 import b1 from '../public/b1.png';
 import b2 from '../public/b2.png';
 import b3 from '../public/b3.png';
 import b4 from '../public/b4.png';
 import b5 from '../public/b5.png';
 import b6 from '../public/b6.png';
+import b7 from '../public/b7.png';
+import b8 from '../public/b8.png';
+import b9 from '../public/b9.png';
+import b10 from '../public/b10.png';
+import b11 from '../public/b11.png';
+import b12 from '../public/b12.png';
 
 interface HomeHeroProps {
   books: BookSummary[];
   totalBooks: number;
 }
 
-// Explicit 1:1 mapping of card slot → imported book asset. Each of b1–b6
-// appears exactly once across the 6 cards.
+// 12 cover slots — one per series. Each book appears exactly once. The
+// carousel rotates all 12 through the 4 visible positions over time.
 const HERO_BOOK_IMAGES: StaticImageData[] = [
-  b1, // slot 0 · CENTER-LEFT
-  b2, // slot 1 · CENTER-RIGHT
-  b3, // slot 2 · MID-LEFT
-  b4, // slot 3 · MID-RIGHT
-  b5, // slot 4 · FAR-LEFT
-  b6, // slot 5 · FAR-RIGHT
+  b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12,
 ];
 
-// 4 visible positions + 2 off-screen "queue" slots. 6 covers cycle through
-// these 6 slots so only 4 books are seen at any given moment, but every cover
-// gets stage time as the carousel rotates. Sizes are +20% vs. the previous
-// spread for stronger visual presence.
+// 4 visible positions + 8 off-screen "queue" slots. 12 covers cycle through
+// these 12 slots so only 4 are seen at any moment, but every series gets
+// stage time as the carousel rotates. Widths are 20% smaller than before;
+// every left% is shifted ~8% leftward so the visible deck sits closer to
+// the left side of its column.
 const CARD_LAYOUT: Array<{ left: string; top: string; w: string; z: number; rot: number; opacity?: number }> = [
-  { left: '34%',  top: '50%', w: '46%', z: 60, rot: -2 }, // 0 · CENTER-LEFT
-  { left: '66%',  top: '50%', w: '46%', z: 60, rot: 2 },  // 1 · CENTER-RIGHT
-  { left: '8%',   top: '50%', w: '38%', z: 45, rot: -6 }, // 2 · MID-LEFT
-  { left: '92%',  top: '50%', w: '38%', z: 45, rot: 6 },  // 3 · MID-RIGHT
-  { left: '-30%', top: '50%', w: '32%', z: 20, rot: -10, opacity: 0 }, // 4 · QUEUE-LEFT
-  { left: '130%', top: '50%', w: '32%', z: 20, rot: 10,  opacity: 0 }, // 5 · QUEUE-RIGHT
+  { left: '26%',   top: '50%', w: '37%', z: 60, rot: -2 },                 // 0 · CENTER-LEFT (visible)
+  { left: '58%',   top: '50%', w: '37%', z: 60, rot:  2 },                 // 1 · CENTER-RIGHT (visible)
+  { left: '0%',    top: '50%', w: '30%', z: 45, rot: -6 },                 // 2 · MID-LEFT (visible)
+  { left: '84%',   top: '50%', w: '30%', z: 45, rot:  6 },                 // 3 · MID-RIGHT (visible)
+  { left: '-38%',  top: '50%', w: '26%', z: 20, rot: -10, opacity: 0 },    // 4 · QUEUE-L-1
+  { left: '122%',  top: '50%', w: '26%', z: 20, rot:  10, opacity: 0 },    // 5 · QUEUE-R-1
+  { left: '-63%',  top: '50%', w: '24%', z: 18, rot: -12, opacity: 0 },    // 6 · QUEUE-L-2
+  { left: '147%',  top: '50%', w: '24%', z: 18, rot:  12, opacity: 0 },    // 7 · QUEUE-R-2
+  { left: '-88%',  top: '50%', w: '22%', z: 15, rot: -14, opacity: 0 },    // 8 · QUEUE-L-3
+  { left: '172%',  top: '50%', w: '22%', z: 15, rot:  14, opacity: 0 },    // 9 · QUEUE-R-3
+  { left: '-113%', top: '50%', w: '21%', z: 12, rot: -16, opacity: 0 },    // 10 · QUEUE-L-4
+  { left: '197%',  top: '50%', w: '21%', z: 12, rot:  16, opacity: 0 },    // 11 · QUEUE-R-4
 ];
 
 export function HomeHero({ books, totalBooks }: HomeHeroProps) {
@@ -119,9 +125,15 @@ export function HomeHero({ books, totalBooks }: HomeHeroProps) {
           0.4,
         );
 
-      // Carousel rotation cycles all 6 positions in a closed loop.
-      let currentPositions = [0, 1, 2, 3, 4, 5];
-      const nextPosMap: Record<number, number> = { 0: 2, 2: 4, 4: 5, 5: 3, 3: 1, 1: 0 };
+      // Carousel rotation cycles all 12 positions in a closed loop. Visual
+      // order (sorted by left%): 10 → 8 → 6 → 4 → 2 → 0 → 1 → 3 → 5 → 7 →
+      // 9 → 11 → wraps. Each tick every card slides one slot to the left;
+      // queue cards become visible, visible cards drift off-screen.
+      let currentPositions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+      const nextPosMap: Record<number, number> = {
+        11: 9, 9: 7, 7: 5, 5: 3, 3: 1, 1: 0,
+        0: 2, 2: 4, 4: 6, 6: 8, 8: 10, 10: 11,
+      };
 
       const playCarousel = () => {
         carouselTimer = gsap.delayedCall(4.5, () => {
@@ -181,20 +193,20 @@ export function HomeHero({ books, totalBooks }: HomeHeroProps) {
     };
   }, []);
 
-  const rawFeatured = books.slice(0, 6);
-  const renderCards = rawFeatured.length === 6
+  const rawFeatured = books.slice(0, 12);
+  const renderCards = rawFeatured.length === 12
     ? rawFeatured
-    : [...rawFeatured, ...Array.from({ length: 6 - rawFeatured.length }).map(() => null)];
+    : [...rawFeatured, ...Array.from({ length: 12 - rawFeatured.length }).map(() => null)];
 
   return (
     <section
       ref={root}
-      className="relative isolate flex min-h-[100vh] w-full flex-col overflow-hidden text-white"
+      className="relative isolate flex w-full flex-col overflow-hidden text-white lg:min-h-[100vh]"
     >
-      
 
-      <div className="relative z-10 flex-1 flex items-center">
-        <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-10 px-6 py-10 lg:grid-cols-[1.1fr_1fr] lg:gap-20 lg:px-10 lg:py-12">
+
+      <div className="relative z-10 flex-1 flex items-start  lg:items-center">
+        <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-20 px-6 pt-0 pb-16 lg:grid-cols-[1.1fr_1fr] lg:gap-20 lg:px-10 lg:py-12">
 
           {/* Text column — appears AFTER the deck on mobile (order-2), reverts
               to grid order on lg+ */}
@@ -334,12 +346,14 @@ export function HomeHero({ books, totalBooks }: HomeHeroProps) {
 
           {/* Deck column — appears FIRST on mobile (order-1), shifted upward
               with negative top margin so the books read closer to the top. */}
-          <div className="relative h-[52vh] min-h-[400px] lg:h-[88vh] lg:min-h-[700px] order-1 lg:order-2 -mt-2 lg:-mt-6">
+          <div className="relative h-[32vh] min-h-[230px] lg:h-[88vh] lg:min-h-[700px] order-1 lg:order-2 -mt-2 lg:-mt-6">
             
 
             <div
               data-hero-deck
-              className="absolute inset-0"
+              // Mobile shifts the entire deck ~14% to the left so the
+              // books visually lean off-page-left. Desktop is unchanged.
+              className="absolute inset-0 -translate-x-[9%] lg:translate-x-0"
               style={{ transformStyle: 'preserve-3d', perspective: '1200px' }}
             >
               {renderCards.map((book, i) => {
@@ -369,9 +383,9 @@ export function HomeHero({ books, totalBooks }: HomeHeroProps) {
 
               <span
                 data-hero-rail
-                className="absolute -bottom-4 left-0 flex items-center gap-4 text-[11px] uppercase tracking-[0.35em] text-white/50 font-medium will-change-transform"
+                className="absolute bottom-2 left-0 flex items-center gap-4 text-[10px] sm:text-[11px] uppercase tracking-[0.35em] text-white/50 font-medium will-change-transform lg:-bottom-4"
               >
-                <span className="font-mono">FEATURED · 06 OF {totalBooks > 0 ? totalBooks : '636'}</span>
+                <span className="font-mono ">FEATURED · 12 OF {totalBooks > 0 ? totalBooks : '636'}</span>
               </span>
             </div>
           </div>
